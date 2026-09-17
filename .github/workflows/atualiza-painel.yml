@@ -1,0 +1,114 @@
+name: Atualiza painel
+
+on:
+  # Dia 12 de cada mes, 09:00 UTC (06:00 em Brasilia). A ANAC publica os dados de um mes
+  # com cerca de dois meses de defasagem, entao uma passada mensal e suficiente.
+  schedule:
+    - cron: "0 9 12 * *"
+  # Mudanca no codigo da pagina: reconstroi a partir do painel.json ja versionado,
+  # sem rebaixar os 359 MB da ANAC.
+  push:
+    branches: [main]
+    paths-ignore: ["README.md", "docs/**"]
+  workflow_dispatch:
+    inputs:
+      rebaixar:
+        description: "Baixar a base da ANAC de novo"
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+env:
+  ANAC_URL: "https://sistemas.anac.gov.br/dadosabertos/Voos%20e%20opera%C3%A7%C3%B5es%20a%C3%A9reas/Dados%20Estat%C3%ADsticos%20do%20Transporte%20A%C3%A9reo/Dados_Estatisticos.csv"
+
+jobs:
+  construir:
+    runs-on: ubuntu-latest
+    outputs:
+      resumo: ${{ steps.montar.outputs.resumo }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Decidir se rebaixa a base
+        id: modo
+        run: |
+          if [ "${{ github.event_name }}" = "push" ]; then
+            echo "baixar=false" >> "$GITHUB_OUTPUT"
+          elif [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            echo "baixar=${{ inputs.rebaixar }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "baixar=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Baixar base da ANAC
+        if: steps.modo.outputs.baixar == 'true'
+        run: |
+          curl -sSL --retry 5 --retry-all-errors --retry-delay 10 \
+               -C - --max-time 1800 -o dados_estatisticos.csv "$ANAC_URL"
+          tamanho=$(stat -c %s dados_estatisticos.csv)
+          echo "Baixados $tamanho bytes"
+          # A base passa de 350 MB; um arquivo muito menor e pagina de erro ou corte.
+          if [ "$tamanho" -lt 300000000 ]; then
+            echo "::error::Download incompleto ($tamanho bytes)"; exit 1
+          fi
+          if ! head -c 60 dados_estatisticos.csv | grep -q "Atualizado em:"; then
+            echo "::error::Cabecalho inesperado — o layout da ANAC pode ter mudado"; exit 1
+          fi
+          head -c 40 dados_estatisticos.csv
+
+      - name: Reagregar
+        if: steps.modo.outputs.baixar == 'true'
+        run: python scripts/agrega.py dados_estatisticos.csv data/painel.json
+
+      - name: Montar pagina
+        id: montar
+        run: |
+          saida=$(python scripts/build.py)
+          echo "$saida"
+          echo "resumo=$saida" >> "$GITHUB_OUTPUT"
+
+      - name: Versionar dados agregados
+        if: steps.modo.outputs.baixar == 'true'
+        run: |
+          if git diff --quiet -- data/painel.json; then
+            echo "Sem mudanca nos dados da ANAC — nada a commitar."
+            exit 0
+          fi
+          asof=$(python -c "import json;print(json.load(open('data/painel.json',encoding='utf-8'))['meta']['ano_max'])")
+          mes=$(python -c "import json;print(json.load(open('data/painel.json',encoding='utf-8'))['meta']['mes_max'])")
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/painel.json
+          git commit -m "dados: base da ANAC ate $mes/$asof"
+          git push
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: dist
+
+  publicar:
+    needs: construir
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - id: deploy
+        uses: actions/deploy-pages@v4
+      - run: echo "Publicado em ${{ steps.deploy.outputs.page_url }} — ${{ needs.construir.outputs.resumo }}"

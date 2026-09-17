@@ -1,0 +1,753 @@
+<title>Demanda e Oferta no Céu Brasileiro</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  color-scheme: light;
+  --bg:#f4f6f8; --surface:#ffffff; --surface-2:#eef1f5; --line:#d9dee6; --line-soft:#e7ebf1;
+  --ink:#10151c; --ink-2:#4d5766; --ink-3:#77818f;
+  --accent:#1c5cab;
+  --s1:#2a78d6; --s2:#eb6834; --s3:#1baf7a; --s4:#eda100; --s5:#e87ba4;
+  --s6:#008300; --s7:#4a3aa7; --s8:#e34948; --s9:#9aa3ae;
+  --grid:rgba(16,21,28,.09);
+  --band:rgba(16,21,28,.05);
+  --shadow:0 1px 2px rgba(16,21,28,.06), 0 8px 24px -16px rgba(16,21,28,.25);
+  --fill-hi:.20; --fill-lo:.10;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme: dark;
+    --bg:#0f1319; --surface:#161b23; --surface-2:#1d232c; --line:#2b323d; --line-soft:#232a34;
+    --ink:#f2f5f9; --ink-2:#a8b2bf; --ink-3:#7d8794;
+    --accent:#6da7ec;
+    --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+    --s6:#008300; --s7:#9085e9; --s8:#e66767; --s9:#7d8794;
+    --grid:rgba(242,245,249,.10);
+    --band:rgba(242,245,249,.05);
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+    --fill-hi:.28; --fill-lo:.13;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme: dark;
+  --bg:#0f1319; --surface:#161b23; --surface-2:#1d232c; --line:#2b323d; --line-soft:#232a34;
+  --ink:#f2f5f9; --ink-2:#a8b2bf; --ink-3:#7d8794;
+  --accent:#6da7ec;
+  --s1:#3987e5; --s2:#d95926; --s3:#199e70; --s4:#c98500; --s5:#d55181;
+  --s6:#008300; --s7:#9085e9; --s8:#e66767; --s9:#7d8794;
+  --grid:rgba(242,245,249,.10);
+  --band:rgba(242,245,249,.05);
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+  --fill-hi:.28; --fill-lo:.13;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:"Archivo",-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  font-size:14px; line-height:1.45; -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px; margin:0 auto; padding:0 16px; padding-block:28px 40px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace; font-variant-numeric:tabular-nums}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-3); margin:0 0 8px
+}
+
+/* ---------- cabeçalho ---------- */
+header.top{border-bottom:1px solid var(--line); padding-bottom:22px; margin-bottom:22px}
+h1{
+  font-size:clamp(28px,5.2vw,44px); font-weight:800; letter-spacing:-.025em;
+  line-height:1.05; margin:0 0 10px; text-wrap:balance; max-width:20ch;
+}
+.dek{margin:0; color:var(--ink-2); max-width:62ch; font-size:15px}
+.stamp{margin-top:14px; display:flex; flex-wrap:wrap; gap:8px 18px; font-size:12px; color:var(--ink-3)}
+.stamp b{color:var(--ink-2); font-weight:500}
+
+/* ---------- controles ---------- */
+.controls{
+  display:flex; flex-wrap:wrap; gap:10px 22px; align-items:flex-end;
+  margin-bottom:20px;
+}
+.ctl{display:flex; flex-direction:column; gap:6px}
+.ctl > span{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-3)}
+.seg{display:flex; background:var(--surface-2); border:1px solid var(--line); border-radius:8px; padding:2px; gap:2px}
+.seg button{
+  font:inherit; font-size:13px; font-weight:500; color:var(--ink-2);
+  background:none; border:0; border-radius:6px; padding:6px 13px; cursor:pointer;
+  transition:background .12s, color .12s;
+}
+.seg button:hover{color:var(--ink)}
+.seg button[aria-pressed="true"]{background:var(--surface); color:var(--ink); box-shadow:var(--shadow)}
+.seg button:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+
+/* ---------- KPIs ---------- */
+.kpis{display:grid; grid-template-columns:repeat(5,1fr); gap:1px; background:var(--line);
+  border:1px solid var(--line); border-radius:12px; overflow:hidden; margin-bottom:26px}
+.kpi{background:var(--surface); padding:14px 16px 15px; min-width:0}
+.kpi .lab{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink-3); margin-bottom:7px; white-space:nowrap;
+  overflow:hidden; text-overflow:ellipsis}
+.kpi .val{font-size:clamp(20px,2.4vw,27px); font-weight:600; letter-spacing:-.02em; line-height:1.1}
+.kpi .val small{font-size:.5em; font-weight:500; color:var(--ink-2); margin-left:3px; letter-spacing:0}
+.kpi .delta{margin-top:5px; font-size:11.5px; display:flex; align-items:center; gap:5px; color:var(--ink-3)}
+.pill{display:inline-flex; align-items:center; gap:3px; padding:1px 6px; border-radius:999px;
+  font-size:11px; font-weight:500; border:1px solid transparent}
+.pill.up{color:#0a6b4a; background:rgba(27,175,122,.14); border-color:rgba(27,175,122,.3)}
+.pill.down{color:#a32e2d; background:rgba(227,73,72,.13); border-color:rgba(227,73,72,.3)}
+:root[data-theme="dark"] .pill.up, :root:not([data-theme="light"]) .pill.up{color:#5fd3a6}
+:root[data-theme="dark"] .pill.down, :root:not([data-theme="light"]) .pill.down{color:#f08c8b}
+@media (prefers-color-scheme: light){ :root:not([data-theme="dark"]) .pill.up{color:#0a6b4a} :root:not([data-theme="dark"]) .pill.down{color:#a32e2d} }
+
+/* ---------- blocos ---------- */
+.block{background:var(--surface); border:1px solid var(--line); border-radius:12px;
+  padding:18px 18px 14px; margin-bottom:18px; box-shadow:var(--shadow)}
+.block > h2{font-size:17px; font-weight:600; letter-spacing:-.015em; margin:0 0 4px}
+.block > p.note{margin:0 0 14px; color:var(--ink-2); font-size:13px; max-width:72ch}
+.duo{display:grid; grid-template-columns:1.15fr .85fr; gap:18px; margin-bottom:18px}
+.duo > .block{margin:0}
+.legend{display:flex; flex-wrap:wrap; gap:6px 16px; margin:0 0 12px; padding:0; list-style:none;
+  font-size:12.5px; color:var(--ink-2)}
+.legend li{display:flex; align-items:center; gap:6px}
+.swatch{width:11px; height:11px; border-radius:3px; flex:none; border:1px solid rgba(0,0,0,.08)}
+.swatch.ln{height:3px; border-radius:2px; width:15px; border:0}
+
+.chart{position:relative; width:100%}
+.chart svg{display:block; width:100%; overflow:visible}
+.tip{
+  position:absolute; pointer-events:none; z-index:5; opacity:0; transition:opacity .1s;
+  background:var(--surface); border:1px solid var(--line); border-radius:9px;
+  box-shadow:var(--shadow); padding:9px 11px; font-size:12.5px; min-width:150px;
+}
+.tip[data-on="1"]{opacity:1}
+.tip .th{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--ink-3); margin-bottom:6px}
+.tip .row{display:flex; align-items:center; gap:7px; justify-content:space-between; margin-top:3px}
+.tip .row .nm{display:flex; align-items:center; gap:6px; color:var(--ink-2); min-width:0}
+.tip .row .vl{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-weight:500}
+
+/* ---------- tabelas ---------- */
+.tablewrap{overflow-x:auto; margin-top:4px}
+table{border-collapse:collapse; width:100%; font-size:13px; min-width:420px}
+th,td{text-align:right; padding:7px 10px; border-bottom:1px solid var(--line-soft); white-space:nowrap}
+th{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink-3); font-weight:500; border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+td.num{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums}
+tbody tr:hover{background:var(--surface-2)}
+.rank{color:var(--ink-3); font-family:"IBM Plex Mono",monospace; font-size:12px}
+
+.toggle{font:inherit; font-size:12.5px; color:var(--accent); background:none; border:0;
+  padding:6px 0; cursor:pointer; text-decoration:underline; text-underline-offset:3px}
+.toggle:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+
+footer{border-top:1px solid var(--line); margin-top:28px; padding-top:18px;
+  color:var(--ink-3); font-size:12.5px; max-width:78ch}
+footer a{color:var(--accent)}
+footer p{margin:0 0 8px}
+
+@media (max-width:860px){
+  .kpis{grid-template-columns:repeat(2,1fr)}
+  .kpi:last-child{grid-column:span 2}
+  .duo{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion: reduce){ *{transition:none!important} }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <p class="eyebrow">Transporte aéreo brasileiro · 2000–<span id="hdr-ano"></span></p>
+    <h1>Demanda, oferta e concentração</h1>
+    <p class="dek">Vinte e seis anos de voos regulares no Brasil, a partir dos microdados da ANAC:
+      quanto de assento foi ofertado, quanto foi ocupado e como o mercado se reorganizou depois de
+      cada choque do setor.</p>
+    <div class="stamp mono">
+      <span>Fonte: <b>ANAC — Dados Estatísticos do Transporte Aéreo</b></span>
+      <span>Série até <b id="hdr-ate"></b></span>
+      <span>Recorte: <b>voos regulares</b></span>
+    </div>
+  </header>
+
+  <div class="controls">
+    <label class="ctl"><span>Mercado</span>
+      <div class="seg" id="seg-nat" role="group" aria-label="Mercado">
+        <button type="button" data-v="DOM" aria-pressed="true">Doméstico</button>
+        <button type="button" data-v="INT" aria-pressed="false">Internacional</button>
+        <button type="button" data-v="TOT" aria-pressed="false">Total</button>
+      </div>
+    </label>
+    <label class="ctl"><span>Período</span>
+      <div class="seg" id="seg-per" role="group" aria-label="Período">
+        <button type="button" data-v="2000" aria-pressed="true">Desde 2000</button>
+        <button type="button" data-v="2010" aria-pressed="false">Desde 2010</button>
+        <button type="button" data-v="2019" aria-pressed="false">Desde 2019</button>
+      </div>
+    </label>
+  </div>
+
+  <div class="kpis" id="kpis"></div>
+
+  <section class="block">
+    <h2>Assentos ofertados e assentos ocupados</h2>
+    <p class="note">A área clara é a oferta (ASK, assentos‑quilômetro oferecidos); a área escura, a
+      demanda paga (RPK, passageiros‑quilômetro pagos). O vão entre as duas é o assento que voou
+      vazio — e a taxa de ocupação, abaixo, é exatamente a razão entre elas.</p>
+    <ul class="legend">
+      <li><span class="swatch" style="background:var(--s2);opacity:.45"></span>Oferta — ASK</li>
+      <li><span class="swatch" style="background:var(--s1)"></span>Demanda paga — RPK</li>
+      <li><span class="swatch ln" style="background:var(--s7)"></span>Taxa de ocupação</li>
+    </ul>
+    <div class="chart" id="c-serie"><div class="tip" id="t-serie"></div></div>
+  </section>
+
+  <div class="duo">
+    <section class="block">
+      <h2>Quem carrega os passageiros</h2>
+      <p class="note">Participação de cada companhia no RPK do <b class="mkt"></b>, por ano. As
+        demais entram em “outras”.</p>
+      <ul class="legend" id="leg-share"></ul>
+      <div class="chart" id="c-share"><div class="tip" id="t-share"></div></div>
+    </section>
+    <section class="block">
+      <h2>Concentração do mercado</h2>
+      <p class="note">Índice Herfindahl‑Hirschman sobre o RPK do <b class="mkt"></b> (0–10.000). As
+        faixas seguem o corte usual das autoridades antitruste.</p>
+      <div class="chart" id="c-hhi"><div class="tip" id="t-hhi"></div></div>
+    </section>
+  </div>
+
+  <div class="duo">
+    <section class="block">
+      <h2>Aeroportos por passageiros</h2>
+      <p class="note">Embarques e desembarques pagos em <b id="lab-ano-aero"></b>. O traço marca o
+        nível de 2019, antes da pandemia.</p>
+      <div class="chart" id="c-aero"><div class="tip" id="t-aero"></div></div>
+    </section>
+    <section class="block">
+      <h2>Rotas domésticas mais movimentadas</h2>
+      <p class="note">Par de aeroportos, nos dois sentidos, em <b id="lab-ano-rota"></b>.</p>
+      <div class="tablewrap"><table id="tb-rotas">
+        <thead><tr><th>Rota</th><th>Passageiros</th><th>Decolagens</th><th>Pax/voo</th></tr></thead>
+        <tbody></tbody>
+      </table></div>
+    </section>
+  </div>
+
+  <section class="block">
+    <h2>Série anual</h2>
+    <p class="note">Os mesmos números dos gráficos, em tabela.</p>
+    <button class="toggle" id="bt-tab" aria-expanded="false" aria-controls="tab-anual">Mostrar tabela</button>
+    <div class="tablewrap" id="tab-anual" hidden><table id="tb-anual">
+      <thead><tr>
+        <th>Ano</th><th>Passageiros</th><th>RPK (bi)</th><th>ASK (bi)</th>
+        <th>Ocupação</th><th>Decolagens</th><th>Carga paga (t)</th><th>HHI</th>
+      </tr></thead><tbody></tbody>
+    </table></div>
+  </section>
+
+  <footer>
+    <p><b>Fonte.</b> ANAC — Dados Estatísticos do Transporte Aéreo (microdados por empresa, par de
+      aeroportos e mês), extraídos do
+      <a href="https://sistemas.anac.gov.br/dadosabertos/" target="_blank" rel="noopener">portal de dados abertos da ANAC</a>
+      e catalogados pelo
+      <a href="https://avstats-brasil.avmoliveira.chatgpt.site/" target="_blank" rel="noopener">AVSTATS‑Brasil (NECTAR‑ITA)</a>.</p>
+    <p><b>Método.</b> Somente voos regulares. RPK e ASK agregados por mês e natureza; taxa de
+      ocupação = RPK/ASK. Movimento de aeroporto soma passageiros pagos na origem e no destino,
+      considerando apenas aeroportos brasileiros. O HHI é calculado sobre a participação em RPK de
+      todas as empresas do mercado no ano, incluindo as agrupadas em “outras”. O último mês da série
+      pode ser preliminar.</p>
+  </footer>
+</div>
+
+<script id="dados" type="application/json">__DADOS__</script>
+<script>
+(function(){
+"use strict";
+const D = JSON.parse(document.getElementById("dados").textContent);
+const MES = ["jan","fev","mar","abr","mai","jun","jul","ago","set","out","nov","dez"];
+const nf = (n,d=0)=>Number(n).toLocaleString("pt-BR",{minimumFractionDigits:d,maximumFractionDigits:d});
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+/* ---------------- preparo dos dados ---------------- */
+const KEYS = ["rpk","ask","pax","dec","carga","comb","hrs"];
+function mesesPor(nat){
+  const m = new Map();
+  for(const r of D.serie){
+    if(nat!=="TOT" && r.n!==nat) continue;
+    const k = r.a*12 + (r.m-1);
+    let o = m.get(k);
+    if(!o){ o = {a:r.a, m:r.m, k}; KEYS.forEach(x=>o[x]=0); m.set(k,o); }
+    KEYS.forEach(x=>o[x]+=r[x]);
+  }
+  return [...m.values()].sort((x,y)=>x.k-y.k);
+}
+const SERIE = {DOM:mesesPor("DOM"), INT:mesesPor("INT"), TOT:mesesPor("TOT")};
+
+function anuaisPor(nat){
+  const m = new Map();
+  for(const r of SERIE[nat]){
+    let o = m.get(r.a);
+    if(!o){ o={a:r.a, meses:0}; KEYS.forEach(x=>o[x]=0); m.set(r.a,o); }
+    KEYS.forEach(x=>o[x]+=r[x]); o.meses++;
+  }
+  return [...m.values()].sort((x,y)=>x.a-y.a);
+}
+const ANUAL = {DOM:anuaisPor("DOM"), INT:anuaisPor("INT"), TOT:anuaisPor("TOT")};
+
+// HHI e share por natureza (TOT reaproveita o mercado doméstico + internacional somados não é
+// somável; para "Total" mostramos a estrutura do mercado doméstico, que é o mercado relevante)
+const NAT_EST = n => (n==="TOT" ? "DOM" : n);
+const HHI = {};
+for(const m of D.mercado){ (HHI[m.n] ||= new Map()).set(m.a, m); }
+
+// Cor por identidade da empresa, nunca pela posição no ano. O mercado doméstico define a base;
+// o internacional reaproveita o slot de quem já tem cor e só então ocupa os livres, de modo que
+// nenhuma empresa troque de cor ao alternar o filtro.
+const SLOTS = ["--s1","--s2","--s3","--s4","--s5","--s6","--s7","--s8"];
+function picosDe(nat){
+  const p = new Map();
+  for(const s of D.share){
+    if(s.n!==nat || s.e==="OUTRAS") continue;
+    p.set(s.e, Math.max(p.get(s.e)||0, s.sh));
+  }
+  return [...p.entries()].sort((a,b)=>b[1]-a[1]).map(x=>x[0]);
+}
+const CORES = new Map();
+const TOP = {};
+TOP.DOM = picosDe("DOM").slice(0,8);
+TOP.DOM.forEach((e,i)=>CORES.set(e,SLOTS[i]));
+TOP.INT = picosDe("INT").slice(0,8);
+{
+  const usados = new Set(TOP.INT.map(e=>CORES.get(e)).filter(Boolean));
+  const pool = SLOTS.filter(s=>!usados.has(s));
+  let k = 0;
+  for(const e of TOP.INT) if(!CORES.has(e)) CORES.set(e, pool[k++] || "--s9");
+}
+TOP.TOT = TOP.DOM;
+// Rótulos curtos para as companhias que chegam a ter cor própria; as demais caem em "Outras".
+const ROTULO = {
+  TAM:"LATAM (TAM)", GLO:"GOL", VRG:"Varig", AZU:"Azul", VSP:"VASP",
+  ONE:"Avianca Brasil", TBA:"Transbrasil", BLC:"TAM Meridionais",
+  AAL:"American", TAP:"TAP", AFR:"Air France", CMP:"Copa",
+  DLH:"Lufthansa", UAL:"United", OUTRAS:"Outras",
+};
+const NOME_EMP = e => ROTULO[e] || e;
+function sharePorAno(nat){
+  const n = NAT_EST(nat), m = new Map();
+  for(const s of D.share){
+    if(s.n!==n) continue;
+    const e = (TOP[n]||[]).includes(s.e) ? s.e : "OUTRAS";
+    let o = m.get(s.a); if(!o){ o=new Map(); m.set(s.a,o); }
+    o.set(e,(o.get(e)||0)+s.sh);
+  }
+  return m;
+}
+const SHARE = {DOM:sharePorAno("DOM"), INT:sharePorAno("INT"), TOT:sharePorAno("DOM")};
+
+const CHOQUES = [
+  {a:2001, m:9,  t:"11/9 e crise cambial"},
+  {a:2006, m:7,  t:"Colapso da Varig"},
+  {a:2016, m:1,  t:"Recessão"},
+  {a:2020, m:4,  t:"Pandemia"},
+];
+
+/* ---------------- estado ---------------- */
+const st = {nat:"DOM", desde:2000};
+function serieFiltrada(){ return SERIE[st.nat].filter(r=>r.a>=st.desde); }
+
+/* ---------------- KPIs ---------------- */
+function kpis(){
+  const s = SERIE[st.nat];
+  const u12 = s.slice(-12), p12 = s.slice(-24,-12);
+  const som = (arr,k)=>arr.reduce((t,r)=>t+r[k],0);
+  const lf = arr => som(arr,"ask")>0 ? som(arr,"rpk")/som(arr,"ask") : 0;
+  const est = HHI[NAT_EST(st.nat)]?.get(D.meta.ano_cheio);
+  const cards = [
+    {lab:"Passageiros pagos · 12 m", v:som(u12,"pax")/1e6, u:"mi", d:1,
+     p:som(p12,"pax")?som(u12,"pax")/som(p12,"pax")-1:null},
+    {lab:"Demanda · RPK · 12 m", v:som(u12,"rpk")/1e9, u:"bi", d:1,
+     p:som(p12,"rpk")?som(u12,"rpk")/som(p12,"rpk")-1:null},
+    {lab:"Oferta · ASK · 12 m", v:som(u12,"ask")/1e9, u:"bi", d:1,
+     p:som(p12,"ask")?som(u12,"ask")/som(p12,"ask")-1:null},
+    {lab:"Taxa de ocupação · 12 m", v:lf(u12)*100, u:"%", d:1, pp:(lf(u12)-lf(p12))*100},
+    {lab:"HHI · "+D.meta.ano_cheio, v:est?est.hhi:0, u:"", d:0,
+     txt: est ? (est.hhi>=2500?"altamente concentrado":est.hhi>=1500?"moderadamente concentrado":"não concentrado") : ""},
+  ];
+  document.getElementById("kpis").innerHTML = cards.map(c=>{
+    let delta = "";
+    if(c.pp!=null){
+      const cl = c.pp>=0?"up":"down";
+      delta = `<div class="delta"><span class="pill ${cl}">${c.pp>=0?"+":"−"}${nf(Math.abs(c.pp),1)} p.p.</span> vs. 12 m anteriores</div>`;
+    } else if(c.p!=null){
+      const cl = c.p>=0?"up":"down";
+      delta = `<div class="delta"><span class="pill ${cl}">${c.p>=0?"+":"−"}${nf(Math.abs(c.p)*100,1)}%</span> vs. 12 m anteriores</div>`;
+    } else if(c.txt){
+      delta = `<div class="delta">${c.txt}</div>`;
+    }
+    return `<div class="kpi"><div class="lab">${c.lab}</div>
+      <div class="val mono">${nf(c.v,c.d)}${c.u?`<small>${c.u}</small>`:""}</div>${delta}</div>`;
+  }).join("");
+}
+
+/* ---------------- utilidades de gráfico ---------------- */
+const NS = "http://www.w3.org/2000/svg";
+function svgEl(t,at){ const e=document.createElementNS(NS,t); for(const k in at) e.setAttribute(k,at[k]); return e; }
+function txt(x,y,s,at={}){ const e=svgEl("text",Object.assign({x,y},at)); e.textContent=s; return e; }
+function ticks(min,max,n){
+  const span = max-min || 1, raw = span/n, mag = Math.pow(10,Math.floor(Math.log10(raw)));
+  const step = [1,2,2.5,5,10].map(m=>m*mag).find(s=>s>=raw) || 10*mag;
+  const out=[]; for(let v=Math.ceil(min/step)*step; v<=max+1e-9; v+=step) out.push(+v.toFixed(10));
+  return out;
+}
+function path(pts){ return pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+" "+p[1].toFixed(1)).join(" "); }
+
+function hoverLayer(host, tip, W, H, padL, padR, n, onIdx){
+  const rect = svgEl("rect",{x:padL,y:0,width:Math.max(1,W-padL-padR),height:H,fill:"transparent",
+                             style:"cursor:crosshair"});
+  const step = (W-padL-padR)/Math.max(1,n-1);
+  function move(ev){
+    const b = host.getBoundingClientRect();
+    const px = ev.clientX - b.left;
+    let i = Math.round((px-padL)/step);
+    i = Math.max(0,Math.min(n-1,i));
+    onIdx(i);
+    tip.dataset.on = "1";
+    const tw = tip.offsetWidth || 170;
+    let left = padL + i*step + 14;
+    if(left + tw > b.width - 4) left = padL + i*step - tw - 14;
+    tip.style.left = Math.max(2,left) + "px";
+    tip.style.top = Math.max(2, Math.min(b.height-tip.offsetHeight-2, ev.clientY-b.top-10)) + "px";
+  }
+  rect.addEventListener("pointermove",move);
+  rect.addEventListener("pointerdown",move);
+  rect.addEventListener("pointerleave",()=>{ tip.dataset.on="0"; onIdx(null); });
+  return rect;
+}
+
+/* ---------------- gráfico 1: RPK × ASK + ocupação ---------------- */
+function gSerie(){
+  const host = document.getElementById("c-serie"), tip = document.getElementById("t-serie");
+  const d = serieFiltrada();
+  const W = host.clientWidth || 800;
+  const H1 = 230, H2 = 112, GAP = 26, H = H1+GAP+H2+24;
+  const padL = 52, padR = 12, padT = 16;
+  host.querySelectorAll("svg").forEach(e=>e.remove());
+  if(!d.length) return;
+
+  const esc = 1e9;
+  const maxY = Math.max(...d.map(r=>r.ask))/esc;
+  const tks = ticks(0,maxY,4), top = Math.max(tks[tks.length-1],maxY);
+  const x = i => padL + i*(W-padL-padR)/Math.max(1,d.length-1);
+  const y1 = v => padT + (H1-padT) * (1 - v/top);
+  const lo = 0.35, hi = 1.0;
+  const y2 = v => H1+GAP + (H2) * (1 - (v-lo)/(hi-lo));
+
+  const svg = svgEl("svg",{viewBox:`0 0 ${W} ${H}`, height:H, role:"img",
+    "aria-label":"Oferta, demanda e taxa de ocupação por mês"});
+  const g = svgEl("g",{}); svg.appendChild(g);
+  const TS = css("--ink-3"), GR = css("--grid");
+
+  // grade + eixo y do painel 1
+  for(const t of tks){
+    g.appendChild(svgEl("line",{x1:padL,x2:W-padR,y1:y1(t),y2:y1(t),stroke:GR,"stroke-width":1}));
+    g.appendChild(txt(padL-8,y1(t)+4,nf(t,0),{"text-anchor":"end","font-size":10.5,fill:TS,
+      class:"mono"}));
+  }
+  g.appendChild(txt(padL-8,padT-6,"bilhões",{"text-anchor":"end","font-size":10,fill:TS,class:"mono"}));
+
+  // faixas do painel 2
+  for(const t of [0.4,0.6,0.8,1.0]){
+    g.appendChild(svgEl("line",{x1:padL,x2:W-padR,y1:y2(t),y2:y2(t),stroke:GR,"stroke-width":1}));
+    g.appendChild(txt(padL-8,y2(t)+4,nf(t*100,0)+"%",{"text-anchor":"end","font-size":10.5,fill:TS,class:"mono"}));
+  }
+
+  // choques
+  for(const c of CHOQUES){
+    const i = d.findIndex(r=>r.a===c.a && r.m===c.m);
+    if(i<0) continue;
+    g.appendChild(svgEl("line",{x1:x(i),x2:x(i),y1:padT-4,y2:H1,stroke:css("--ink-3"),
+      "stroke-width":1,"stroke-dasharray":"2 3",opacity:.55}));
+    const t = txt(x(i)+4,padT+3,c.t,{"font-size":10,fill:TS,class:"mono"});
+    if(x(i) > W*0.72) t.setAttribute("text-anchor","end"), t.setAttribute("x",x(i)-4);
+    g.appendChild(t);
+  }
+
+  // áreas: oferta por baixo, demanda por cima, com 2px de respiro entre elas
+  const base = y1(0);
+  const pAsk = d.map((r,i)=>[x(i), y1(r.ask/esc)]);
+  const pRpk = d.map((r,i)=>[x(i), y1(r.rpk/esc)]);
+  g.appendChild(svgEl("path",{d:path(pAsk)+` L ${x(d.length-1)} ${base} L ${x(0)} ${base} Z`,
+    fill:css("--s2"), "fill-opacity":css("--fill-lo")}));
+  g.appendChild(svgEl("path",{d:path(pAsk), fill:"none", stroke:css("--s2"), "stroke-width":1.6,
+    "stroke-linejoin":"round"}));
+  g.appendChild(svgEl("path",{d:path(pRpk)+` L ${x(d.length-1)} ${base} L ${x(0)} ${base} Z`,
+    fill:css("--s1"), "fill-opacity":css("--fill-hi")}));
+  g.appendChild(svgEl("path",{d:path(pRpk), fill:"none", stroke:css("--s1"), "stroke-width":2,
+    "stroke-linejoin":"round"}));
+
+  // ocupação
+  const pLf = d.map((r,i)=>[x(i), y2(r.ask>0 ? Math.max(lo,Math.min(hi,r.rpk/r.ask)) : lo)]);
+  g.appendChild(svgEl("path",{d:path(pLf), fill:"none", stroke:css("--s7"), "stroke-width":2,
+    "stroke-linejoin":"round","stroke-linecap":"round"}));
+  g.appendChild(txt(padL, H1+GAP-8, "TAXA DE OCUPAÇÃO", {"font-size":10,fill:TS,class:"mono",
+    "letter-spacing":"0.1em"}));
+
+  // eixo x
+  const anos = [...new Set(d.map(r=>r.a))];
+  const passo = Math.ceil(anos.length/Math.max(4,Math.floor(W/95)));
+  anos.forEach((a,k)=>{
+    if(k%passo) return;
+    const i = d.findIndex(r=>r.a===a);
+    g.appendChild(txt(x(i), H-6, a, {"text-anchor":"middle","font-size":10.5,fill:TS,class:"mono"}));
+  });
+
+  // interação
+  const cross = svgEl("line",{x1:0,x2:0,y1:padT-4,y2:H1+GAP+H2,stroke:css("--ink-2"),
+    "stroke-width":1,opacity:0});
+  const dA = svgEl("circle",{r:4,fill:css("--s2"),stroke:css("--surface"),"stroke-width":2,opacity:0});
+  const dR = svgEl("circle",{r:4,fill:css("--s1"),stroke:css("--surface"),"stroke-width":2,opacity:0});
+  const dL = svgEl("circle",{r:4,fill:css("--s7"),stroke:css("--surface"),"stroke-width":2,opacity:0});
+  g.append(cross,dA,dR,dL);
+  svg.appendChild(hoverLayer(host,tip,W,H,padL,padR,d.length,i=>{
+    if(i==null){ [cross,dA,dR,dL].forEach(e=>e.setAttribute("opacity",0)); return; }
+    const r = d[i], X = x(i), l = r.ask>0 ? r.rpk/r.ask : 0;
+    cross.setAttribute("x1",X); cross.setAttribute("x2",X); cross.setAttribute("opacity",.45);
+    dA.setAttribute("cx",X); dA.setAttribute("cy",y1(r.ask/esc)); dA.setAttribute("opacity",1);
+    dR.setAttribute("cx",X); dR.setAttribute("cy",y1(r.rpk/esc)); dR.setAttribute("opacity",1);
+    dL.setAttribute("cx",X); dL.setAttribute("cy",y2(Math.max(lo,Math.min(hi,l)))); dL.setAttribute("opacity",1);
+    tip.innerHTML = `<div class="th">${MES[r.m-1]}/${r.a}</div>
+      <div class="row"><span class="nm"><span class="swatch" style="background:var(--s2)"></span>Oferta</span><span class="vl">${nf(r.ask/1e9,2)} bi</span></div>
+      <div class="row"><span class="nm"><span class="swatch" style="background:var(--s1)"></span>Demanda</span><span class="vl">${nf(r.rpk/1e9,2)} bi</span></div>
+      <div class="row"><span class="nm"><span class="swatch" style="background:var(--s7)"></span>Ocupação</span><span class="vl">${nf(l*100,1)}%</span></div>
+      <div class="row"><span class="nm">Passageiros</span><span class="vl">${nf(r.pax/1e6,2)} mi</span></div>`;
+  }));
+  host.appendChild(svg);
+}
+
+/* ---------------- gráfico 2: participação ---------------- */
+function gShare(){
+  const host = document.getElementById("c-share"), tip = document.getElementById("t-share");
+  const mapa = SHARE[st.nat];
+  const anos = [...mapa.keys()].filter(a=>a>=st.desde && a<=D.meta.ano_cheio).sort((a,b)=>a-b);
+  const W = host.clientWidth || 500, H = 250, padL = 38, padR = 8, padT = 8, padB = 22;
+  host.querySelectorAll("svg").forEach(e=>e.remove());
+  if(!anos.length) return;
+
+  // empresas com cor própria neste mercado (Outras sempre por último)
+  const presentes = (TOP[st.nat]||[]).filter(e=>anos.some(a=>(mapa.get(a)?.get(e)||0)>0));
+  const pilha = [...presentes,"OUTRAS"];
+
+  const x = i => padL + i*(W-padL-padR)/Math.max(1,anos.length-1);
+  const y = v => padT + (H-padT-padB)*(1-v);
+  const svg = svgEl("svg",{viewBox:`0 0 ${W} ${H}`,height:H,role:"img",
+    "aria-label":"Participação das companhias no RPK, por ano"});
+  const TS = css("--ink-3");
+
+  for(const t of [0,.25,.5,.75,1]){
+    svg.appendChild(svgEl("line",{x1:padL,x2:W-padR,y1:y(t),y2:y(t),stroke:css("--grid"),"stroke-width":1}));
+    svg.appendChild(txt(padL-7,y(t)+4,nf(t*100,0)+"%",{"text-anchor":"end","font-size":10.5,fill:TS,class:"mono"}));
+  }
+
+  // acumulado
+  const acum = anos.map(()=>0);
+  const cor = e => e==="OUTRAS" ? css("--s9") : css(CORES.get(e));
+  for(const e of pilha){
+    const topo = anos.map((a,i)=>{
+      const v = mapa.get(a)?.get(e)||0;
+      const t = acum[i]+v; return t;
+    });
+    const p = [];
+    anos.forEach((a,i)=>p.push([x(i),y(topo[i])]));
+    for(let i=anos.length-1;i>=0;i--) p.push([x(i),y(acum[i])]);
+    svg.appendChild(svgEl("path",{d:path(p)+" Z", fill:cor(e), "fill-opacity":.85,
+      stroke:css("--surface"), "stroke-width":2, "stroke-linejoin":"round"}));
+    anos.forEach((a,i)=>acum[i]=topo[i]);
+  }
+
+  const passo = Math.ceil(anos.length/Math.max(3,Math.floor(W/64)));
+  anos.forEach((a,i)=>{ if(i%passo) return;
+    svg.appendChild(txt(x(i),H-5,a,{"text-anchor":"middle","font-size":10.5,fill:TS,class:"mono"})); });
+
+  const cross = svgEl("line",{x1:0,x2:0,y1:padT,y2:H-padB,stroke:css("--ink"),"stroke-width":1.5,opacity:0});
+  svg.appendChild(cross);
+  svg.appendChild(hoverLayer(host,tip,W,H,padL,padR,anos.length,i=>{
+    if(i==null){ cross.setAttribute("opacity",0); return; }
+    const a = anos[i], m = mapa.get(a)||new Map();
+    cross.setAttribute("x1",x(i)); cross.setAttribute("x2",x(i)); cross.setAttribute("opacity",.5);
+    const linhas = pilha.map(e=>[e,m.get(e)||0]).filter(r=>r[1]>0.0005)
+      .sort((p,q)=>q[1]-p[1])
+      .map(([e,v])=>`<div class="row"><span class="nm"><span class="swatch" style="background:${cor(e)}"></span>${NOME_EMP(e)}</span><span class="vl">${nf(v*100,1)}%</span></div>`).join("");
+    tip.innerHTML = `<div class="th">${a}</div>${linhas}`;
+  }));
+  host.appendChild(svg);
+
+  document.getElementById("leg-share").innerHTML = pilha.map(e=>
+    `<li><span class="swatch" style="background:${cor(e)}"></span>${NOME_EMP(e)}</li>`).join("");
+}
+
+/* ---------------- gráfico 3: HHI ---------------- */
+function gHHI(){
+  const host = document.getElementById("c-hhi"), tip = document.getElementById("t-hhi");
+  const m = HHI[NAT_EST(st.nat)] || new Map();
+  const d = [...m.values()].filter(r=>r.a>=st.desde && r.a<=D.meta.ano_cheio).sort((a,b)=>a.a-b.a);
+  const W = host.clientWidth || 400, H = 250, padL = 44, padR = 10, padT = 8, padB = 22;
+  host.querySelectorAll("svg").forEach(e=>e.remove());
+  if(!d.length) return;
+
+  const top = Math.max(4000, Math.ceil(Math.max(...d.map(r=>r.hhi))/1000)*1000);
+  const x = i => padL + i*(W-padL-padR)/Math.max(1,d.length-1);
+  const y = v => padT + (H-padT-padB)*(1-v/top);
+  const svg = svgEl("svg",{viewBox:`0 0 ${W} ${H}`,height:H,role:"img",
+    "aria-label":"Índice HHI do mercado, por ano"});
+  const TS = css("--ink-3");
+
+  // faixas antitruste
+  const faixas = [[2500,top,"alta concentração"],[1500,2500,"moderada"],[0,1500,"baixa"]];
+  faixas.forEach(([a,b,rot],k)=>{
+    svg.appendChild(svgEl("rect",{x:padL,y:y(b),width:W-padL-padR,height:Math.max(0,y(a)-y(b)),
+      fill:css("--ink"), "fill-opacity": k===0?.07:k===1?.035:0}));
+    if(y(a)-y(b) > 20)
+      svg.appendChild(txt(W-padR-4,y(b)+13,rot,{"text-anchor":"end","font-size":10,fill:TS,class:"mono"}));
+  });
+  for(const t of [1500,2500]){
+    svg.appendChild(svgEl("line",{x1:padL,x2:W-padR,y1:y(t),y2:y(t),stroke:css("--ink-3"),
+      "stroke-width":1,"stroke-dasharray":"3 3",opacity:.6}));
+  }
+  for(const t of ticks(0,top,4)){
+    svg.appendChild(txt(padL-7,y(t)+4,nf(t,0),{"text-anchor":"end","font-size":10.5,fill:TS,class:"mono"}));
+  }
+
+  const pts = d.map((r,i)=>[x(i),y(r.hhi)]);
+  svg.appendChild(svgEl("path",{d:path(pts),fill:"none",stroke:css("--s8"),"stroke-width":2.5,
+    "stroke-linejoin":"round","stroke-linecap":"round"}));
+  const last = pts[pts.length-1];
+  svg.appendChild(svgEl("circle",{cx:last[0],cy:last[1],r:4.5,fill:css("--s8"),
+    stroke:css("--surface"),"stroke-width":2}));
+
+  const passo = Math.ceil(d.length/Math.max(3,Math.floor(W/64)));
+  d.forEach((r,i)=>{ if(i%passo) return;
+    svg.appendChild(txt(x(i),H-5,r.a,{"text-anchor":"middle","font-size":10.5,fill:TS,class:"mono"})); });
+
+  const dot = svgEl("circle",{r:5,fill:css("--s8"),stroke:css("--surface"),"stroke-width":2,opacity:0});
+  const cross = svgEl("line",{x1:0,x2:0,y1:padT,y2:H-padB,stroke:css("--ink-2"),"stroke-width":1,opacity:0});
+  svg.append(cross,dot);
+  svg.appendChild(hoverLayer(host,tip,W,H,padL,padR,d.length,i=>{
+    if(i==null){ dot.setAttribute("opacity",0); cross.setAttribute("opacity",0); return; }
+    const r = d[i];
+    dot.setAttribute("cx",x(i)); dot.setAttribute("cy",y(r.hhi)); dot.setAttribute("opacity",1);
+    cross.setAttribute("x1",x(i)); cross.setAttribute("x2",x(i)); cross.setAttribute("opacity",.4);
+    tip.innerHTML = `<div class="th">${r.a}</div>
+      <div class="row"><span class="nm">HHI</span><span class="vl">${nf(r.hhi,0)}</span></div>
+      <div class="row"><span class="nm">4 maiores</span><span class="vl">${nf(r.cr4*100,1)}%</span></div>
+      <div class="row"><span class="nm">Empresas</span><span class="vl">${r.nemp}</span></div>`;
+  }));
+  host.appendChild(svg);
+}
+
+/* ---------------- gráfico 4: aeroportos ---------------- */
+function gAero(){
+  const host = document.getElementById("c-aero"), tip = document.getElementById("t-aero");
+  host.querySelectorAll("svg").forEach(e=>e.remove());
+  const A = D.meta.ano_cheio;
+  const cur = D.aero.filter(r=>r.a===A).sort((a,b)=>b.pax-a.pax).slice(0,12);
+  const ref = new Map(D.aero.filter(r=>r.a===2019).map(r=>[r.s,r.pax]));
+  if(!cur.length) return;
+  const W = host.clientWidth || 500, rowH = 26, padL = 92, padR = 54, padT = 6;
+  const H = padT + cur.length*rowH + 22;
+  const max = Math.max(...cur.map(r=>r.pax), ...cur.map(r=>ref.get(r.s)||0));
+  const x = v => padL + (W-padL-padR)*v/max;
+  const svg = svgEl("svg",{viewBox:`0 0 ${W} ${H}`,height:H,role:"img",
+    "aria-label":"Passageiros por aeroporto"});
+  const TS = css("--ink-3");
+
+  cur.forEach((r,i)=>{
+    const yy = padT + i*rowH, bh = 15, meta = D.aero_meta[r.s] || {};
+    svg.appendChild(txt(padL-8, yy+bh-3, r.s, {"text-anchor":"end","font-size":11.5,
+      fill:css("--ink-2"), class:"mono"}));
+    svg.appendChild(svgEl("rect",{x:padL,y:yy,width:Math.max(1,x(r.pax)-padL),height:bh,
+      rx:4, fill:css("--s1"), "fill-opacity":.9}));
+    const v19 = ref.get(r.s);
+    if(v19){
+      svg.appendChild(svgEl("line",{x1:x(v19),x2:x(v19),y1:yy-2.5,y2:yy+bh+2.5,
+        stroke:css("--ink"),"stroke-width":2,opacity:.55}));
+    }
+    svg.appendChild(txt(W-padR+6, yy+bh-3, nf(r.pax/1e6,1)+" mi",
+      {"font-size":11.5, fill:css("--ink-2"), class:"mono"}));
+    const alvo = svgEl("rect",{x:0,y:yy-4,width:W,height:rowH,fill:"transparent",style:"cursor:default"});
+    alvo.addEventListener("pointerenter",ev=>{
+      const b = host.getBoundingClientRect();
+      tip.dataset.on="1";
+      tip.innerHTML = `<div class="th">${r.s} · ${meta.nome||""} ${meta.uf?"("+meta.uf+")":""}</div>
+        <div class="row"><span class="nm">${A}</span><span class="vl">${nf(r.pax/1e6,2)} mi</span></div>
+        ${v19?`<div class="row"><span class="nm">2019</span><span class="vl">${nf(v19/1e6,2)} mi</span></div>
+        <div class="row"><span class="nm">Variação</span><span class="vl">${r.pax>=v19?"+":"−"}${nf(Math.abs(r.pax/v19-1)*100,1)}%</span></div>`:""}`;
+      tip.style.left = Math.min(b.width - (tip.offsetWidth||180) - 4, padL+10) + "px";
+      tip.style.top = Math.max(2, yy - 6) + "px";
+    });
+    alvo.addEventListener("pointerleave",()=>tip.dataset.on="0");
+    svg.appendChild(alvo);
+  });
+  svg.appendChild(txt(padL, H-6, "traço vertical = nível de 2019",
+    {"font-size":10, fill:TS, class:"mono"}));
+  host.appendChild(svg);
+}
+
+/* ---------------- tabelas ---------------- */
+function tabelas(){
+  const A = D.meta.ano_cheio;
+  document.getElementById("lab-ano-aero").textContent = A;
+  document.getElementById("lab-ano-rota").textContent = A;
+  document.querySelector("#tb-rotas tbody").innerHTML = D.rotas.slice(0,10).map((r,i)=>{
+    const [a,b] = r.par.split("-");
+    return `<tr><td><span class="rank">${i+1}</span> ${a} ⇄ ${b}</td>
+      <td class="num">${nf(r.pax/1e6,2)} mi</td>
+      <td class="num">${nf(r.dec,0)}</td>
+      <td class="num">${r.dec?nf(r.pax/r.dec,0):"—"}</td></tr>`;
+  }).join("");
+
+  const m = HHI[NAT_EST(st.nat)] || new Map();
+  document.querySelector("#tb-anual tbody").innerHTML = ANUAL[st.nat]
+    .filter(r=>r.a>=st.desde).slice().reverse().map(r=>{
+    const h = m.get(r.a);
+    return `<tr><td class="mono">${r.a}${r.meses<12?" *":""}</td>
+      <td class="num">${nf(r.pax,0)}</td>
+      <td class="num">${nf(r.rpk/1e9,1)}</td>
+      <td class="num">${nf(r.ask/1e9,1)}</td>
+      <td class="num">${r.ask?nf(r.rpk/r.ask*100,1)+"%":"—"}</td>
+      <td class="num">${nf(r.dec,0)}</td>
+      <td class="num">${nf(r.carga/1000,0)}</td>
+      <td class="num">${h?nf(h.hhi,0):"—"}</td></tr>`;
+  }).join("");
+}
+
+/* ---------------- render ---------------- */
+function render(){
+  const rot = st.nat==="INT" ? "mercado internacional" : "mercado doméstico";
+  document.querySelectorAll(".mkt").forEach(e=>e.textContent=rot);
+  kpis(); gSerie(); gShare(); gHHI(); gAero(); tabelas();
+}
+document.getElementById("hdr-ano").textContent = D.meta.ano_max;
+document.getElementById("hdr-ate").textContent = MES[D.meta.mes_max-1]+"/"+D.meta.ano_max;
+
+for(const [id,key,cast] of [["seg-nat","nat",String],["seg-per","desde",Number]]){
+  document.getElementById(id).addEventListener("click",ev=>{
+    const b = ev.target.closest("button[data-v]"); if(!b) return;
+    st[key] = cast(b.dataset.v);
+    [...b.parentNode.children].forEach(x=>x.setAttribute("aria-pressed", String(x===b)));
+    render();
+  });
+}
+const bt = document.getElementById("bt-tab"), box = document.getElementById("tab-anual");
+bt.addEventListener("click",()=>{
+  const open = box.hidden;
+  box.hidden = !open; bt.setAttribute("aria-expanded",String(open));
+  bt.textContent = open ? "Ocultar tabela" : "Mostrar tabela";
+});
+
+render();
+let t; addEventListener("resize",()=>{ clearTimeout(t); t=setTimeout(render,180); });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change",render);
+new MutationObserver(render).observe(document.documentElement,{attributes:true,attributeFilter:["data-theme"]});
+})();
+</script>
