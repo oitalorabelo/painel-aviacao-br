@@ -35,9 +35,9 @@ jobs:
     outputs:
       resumo: ${{ steps.montar.outputs.resumo }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
           cache: pip
@@ -97,8 +97,8 @@ jobs:
           git commit -m "dados: base da ANAC ate $mes/$asof"
           git push
 
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/configure-pages@v6
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: dist
 
@@ -110,5 +110,5 @@ jobs:
       url: ${{ steps.deploy.outputs.page_url }}
     steps:
       - id: deploy
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
       - run: echo "Publicado em ${{ steps.deploy.outputs.page_url }} — ${{ needs.construir.outputs.resumo }}"
