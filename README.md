@@ -5,6 +5,8 @@ concentração de mercado — construído a partir dos microdados da ANAC. A pá
 sozinha todo mês, via GitHub Actions.
 
 **Painel:** https://oitalorabelo.github.io/painel-aviacao-br/
+**Guia (PDF):** [`docs/guia-painel-aviacao.pdf`](docs/guia-painel-aviacao.pdf) — como ler o painel,
+de onde vêm os dados e como ele é construído.
 
 ## O que ele mostra
 
