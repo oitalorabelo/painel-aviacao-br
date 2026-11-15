@@ -204,9 +204,20 @@ footer p{margin:0 0 8px}
   padding:9px 11px; color:var(--ink); overflow-x:auto; white-space:pre; line-height:1.6}
 .row-acts{display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-top:14px}
 
+.sub{font-size:14.5px; font-weight:600; margin:18px 0 4px; display:flex; align-items:center; gap:8px; letter-spacing:-.01em}
+.num-s{display:inline-grid; place-items:center; width:20px; height:20px; border-radius:50%; background:var(--accent);
+  color:var(--surface); font-size:11.5px; font-weight:600}
+.prem{display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:8px 0 6px}
+.pcard{border:1px solid var(--line); border-radius:10px; padding:11px 12px 9px; background:var(--surface-2); min-width:0}
+.pcard select{width:100%; font:inherit; font-size:12.5px; color:var(--ink); background:var(--surface);
+  border:1px solid var(--line); border-radius:7px; padding:6px 7px; margin:6px 0 2px; cursor:pointer}
+.pcard select:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+.pcard .sl{margin:0}
 @media (max-width:980px){
   .sim-grid{grid-template-columns:1fr}
+  .prem{grid-template-columns:repeat(2,minmax(0,1fr))}
 }
+@media (max-width:560px){ .prem{grid-template-columns:1fr} }
 @media (max-width:860px){
   .kpis{grid-template-columns:repeat(2,1fr)}
   .kpi:last-child{grid-column:span 2}
@@ -307,6 +318,12 @@ footer p{margin:0 0 8px}
       que pode ser atendido (spill, EAV2/EAV5). O tracejado cinza é a referência, para comparação.
       Os filtros do topo não afetam o simulador.</p>
 
+    <h3 class="sub"><span class="num-s">1</span> Premissas <span class="tag">literatura e dados de mercado</span></h3>
+    <p class="note">Parâmetros estruturais, que o painel não consegue medir (não há dados de tarifa). Escolha
+      uma fonte na lista ou ajuste o controle; valem para todos os cenários, inclusive a referência.</p>
+    <div class="prem" id="sim-prem"></div>
+
+    <h3 class="sub"><span class="num-s">2</span> Cenário <span class="tag">o que muda daqui em diante</span></h3>
     <div class="sim-head">
       <div class="ctl"><span>Cenários prontos</span>
         <div class="seg wrapit" id="sim-presets" role="group" aria-label="Cenários prontos"></div>
@@ -379,16 +396,27 @@ P_k     = (1 + tendência)^k × (1 + ΔP_combustível) × (1 + ΔP_fusão)
       <p><b>Fusão.</b> HHI depois = HHI antes + 2·s₁·s₂·10.000, com as participações em RPK do último
         ano fechado. O poder de mercado vem de Cournot (MIC5): L = (P − CMg)/P = 1/(n·|ε|); com
         empresas desiguais, n é o número de concorrentes efetivos 1/HHI (EAV4), ou seja, L = HHI/(10.000·|ε|).
+        O parâmetro de conduta θ generaliza: L = θ·HHI/(10.000·|ε|). Com θ = 1 as empresas competem
+        em quantidades (Cournot) e a concentração vira margem; com θ = 0 competem em preço (Bertrand com
+        produto homogêneo), o preço fica no custo marginal e a fusão só muda o preço pela eficiência.
         Com custo marginal constante, P = CMg/(1 − L), e a fusão muda o preço em
         (1 − e)·(1 − L_antes)/(1 − L_depois) − 1, onde <i>e</i> é a redução do custo marginal por
         eficiência. A eficiência que zera o aumento de preço é o ponto de equilíbrio do <i>trade‑off</i> de
-        Williamson (EAV4). Se |ε| ≤ HHI/10.000, não há equilíbrio de Cournot e o efeito não é aplicado.</p>
+        Williamson (EAV4). Se θ·HHI/10.000 ≥ |ε|, não há equilíbrio e o efeito não é aplicado.</p>
       <div class="eq">ASK_disponível = ASK_base(mês) × (1 + g_oferta)^k
 RPK_atendido   = min(RPK_dem, ASK_disponível × ocupação máxima)      spill = RPK_dem − RPK_atendido
 ASK_voado      = min(ASK_disponível, RPK_dem ÷ ocupação do mês‑base)</div>
       <p>Ou seja: enquanto há frota, as empresas ajustam a oferta à demanda e a ocupação fica a do
         período‑base; quando a frota não basta, a ocupação sobe até o teto e o excedente é demanda
         perdida (spill, a diferença entre demanda irrestrita e tráfego, EAV2/EAV5).</p>
+      <p><b>Fontes das premissas.</b> OLIVEIRA, A. V. M. <i>Demanda por viagens aéreas</i> (EAV2), slides
+        28–30 · GILLEN, D. W.; MORRISON, W. G.; STEWART, C. <i>Air travel demand elasticities: concepts,
+        issues and measurement</i>. Department of Finance Canada, 2004 · HOLLOWAY, S. <i>Straight and level:
+        practical airline economics</i>. 3. ed. Ashgate, 2008 · ANAC, <i>Anuário do Transporte Aéreo</i>
+        2024 e 2025 (participação do combustível nos custos: 30,6% e 29,4%) · IATA, <i>Global outlook for
+        air transport</i>, jun. 2026 (25,4% em 2025; 31,4% projetado para 2026) · ABEAR, estimativa citada
+        pelo <i>Correio Braziliense</i> em abr. 2026 (≈ 45% após as altas do QAV) · PINDYCK, R.; RUBINFELD, D.
+        <i>Microeconomia</i> (MIC5: Cournot e Bertrand).</p>
       <p><b>Limites.</b> O painel não mede preço: as elasticidades são hipóteses da literatura (EAV2), não
         estimativas. O HHI nacional não é o mercado relevante de um caso antitruste, que é a rota, e o
         Cournot tende a superestimar margens — leia a fusão pela comparação antes × depois e pela
@@ -422,8 +450,8 @@ ASK_voado      = min(ASK_disponível, RPK_dem ÷ ocupação do mês‑base)</div
       pode ser preliminar.</p>
     <p><b>Simulador.</b> Projeção de cenários, não previsão estatística: demanda de elasticidade
       constante a partir dos últimos 12 meses do mercado doméstico, com elasticidades e custos como
-      hipóteses ajustáveis (não há dados de tarifa no painel). Fusão via HHI e Cournot (Lerner =
-      HHI/|ε|). Detalhes em “Como o simulador calcula”.</p>
+      hipóteses ajustáveis (não há dados de tarifa no painel). Fusão via HHI e Cournot/Bertrand (Lerner =
+      θ·HHI/|ε|). Detalhes em “Como o simulador calcula”.</p>
   </footer>
 </div>
 
@@ -904,16 +932,36 @@ const HORIZ = [ULT.a+2, ULT.a+4, ULT.a+9];
 const PARAMS = [
   {id:"pib", g:"dem", lab:"Crescimento do PIB", min:-3, max:5, step:0.1, def:2.0,
    fmt:v=>sg(v,1)+"% a.a.", hint:"Desloca a curva de demanda (renda)."},
-  {id:"ey",  g:"dem", lab:"Elasticidade‑renda", min:0.5, max:3, step:0.1, def:1.5,
-   fmt:v=>nf(v,1), hint:"% de RPK para cada 1% de PIB."},
+  {id:"ey",  g:"pre", lab:"Elasticidade‑renda", min:0.5, max:3, step:0.05, def:1.5,
+   fmt:v=>nf(v,2), hint:"% de RPK para cada 1% de PIB.",
+   opts:[[2.0,"2,00 · mercado imaturo — Holloway (2008), estágios 1–2"],
+         [1.5,"1,50 · benchmark agregado, ponto médio (EAV2, slide 28: 1 a 2)"],
+         [1.0,"1,00 · mercado maduro — Holloway (2008), estágios 3–4"]]},
   {id:"tar", g:"dem", lab:"Tendência real da tarifa", min:-4, max:4, step:0.5, def:0,
    fmt:v=>sg(v,1)+"% a.a.", hint:"Movimento ao longo da curva (yield)."},
-  {id:"ep",  g:"dem", lab:"Elasticidade‑preço", min:-2, max:-0.3, step:0.05, def:-1.0,
-   fmt:v=>nf(v,2), hint:"Também define o poder de mercado da fusão."},
+  {id:"ep",  g:"pre", lab:"Elasticidade‑preço", min:-2, max:-0.3, step:0.01, def:-1.0,
+   fmt:v=>sg(v,2), hint:"Também define o poder de mercado da fusão.",
+   opts:[[-0.5,"−0,50 · benchmark agregado, limite inelástico (EAV2, slide 28)"],
+         [-0.75,"−0,75 · benchmark agregado, ponto médio (EAV2, slide 28)"],
+         [-1.0,"−1,00 · benchmark agregado, limite elástico (EAV2, slide 28)"],
+         [-0.7,"−0,70 · curta distância, negócios — Gillen et al. (2004)"],
+         [-1.1,"−1,10 · longa distância doméstica, lazer — Gillen et al. (2004)"],
+         [-1.15,"−1,15 · longa distância doméstica, negócios — Gillen et al. (2004)"],
+         [-1.52,"−1,52 · curta distância, lazer — Gillen et al. (2004)"]]},
+  {id:"cond", g:"pre", lab:"Conduta das empresas (θ)", min:0, max:1, step:0.05, def:1,
+   fmt:v=>nf(v,2), hint:"Lerner = θ·HHI/|ε|. Só afeta a fusão.",
+   opts:[[1,"1,00 · Cournot — competem em quantidades/capacidade (MIC5)"],
+         [0.5,"0,50 · intermediária"],
+         [0,"0,00 · Bertrand — competem em preço, P = CMg (MIC5)"]]},
   {id:"qav", g:"cus", lab:"Variação do querosene", min:-50, max:100, step:5, def:0,
    fmt:v=>sg(v,0)+"%", hint:"Choque permanente no preço do QAV."},
-  {id:"fat", g:"cus", lab:"Peso do combustível no custo", min:15, max:50, step:1, def:35,
-   fmt:v=>nf(v,0)+"%", hint:"Valor de partida; confira no anuário da ANAC."},
+  {id:"fat", g:"pre", lab:"Peso do combustível no custo", min:15, max:50, step:0.1, def:29.4,
+   fmt:v=>nf(v,1)+"%", hint:"Fatia do custo que acompanha o querosene.",
+   opts:[[29.4,"29,4% · ANAC, Anuário 2025 — empresas brasileiras"],
+         [30.6,"30,6% · ANAC, Anuário 2024 — empresas brasileiras"],
+         [25.4,"25,4% · IATA — média mundial 2025"],
+         [31.4,"31,4% · IATA — projeção mundial 2026"],
+         [45,"45,0% · ABEAR — estimativa após as altas do QAV (abr/2026)"]]},
   {id:"rep", g:"cus", lab:"Repasse à tarifa", min:0, max:100, step:5, def:100,
    fmt:v=>nf(v,0)+"%", hint:"100% = longo prazo (P proporcional ao CMg)."},
   {id:"efi", g:"fus", lab:"Ganho de eficiência", min:0, max:30, step:1, def:0,
@@ -924,6 +972,8 @@ const PARAMS = [
    fmt:v=>nf(v,0)+"%", hint:"Acima disso a demanda vira spill."},
 ];
 const DEF = Object.fromEntries(PARAMS.map(q=>[q.id,q.def]));
+const PRE = PARAMS.filter(q=>q.g==="pre"), CEN = PARAMS.filter(q=>q.g!=="pre");
+const premissas = p => Object.fromEntries(PRE.map(q=>[q.id,p[q.id]]));
 DEF.fus = "NONE"; DEF.hor = HORIZ[1];
 const PRESETS = [
   ["ref",   "Referência",          {}],
@@ -935,15 +985,15 @@ const PRESETS = [
 ].filter(p=>!p[2].fus || FUSOES.some(f=>f[0]===p[2].fus));
 const sim = Object.assign({}, DEF);
 
-function fusao(p){
+function fusao(p, theta=p.cond){
   if(p.fus==="NONE") return null;
   const [e1,e2] = p.fus.split("+");
   const s1 = SH0.get(e1)||0, s2 = SH0.get(e2)||0;
   const dH = 2*s1*s2*1e4, H1 = HHI0 + dH, E = Math.abs(p.ep);
-  const L0 = HHI0/1e4/E, L1 = H1/1e4/E;
+  const L0 = theta*HHI0/1e4/E, L1 = theta*H1/1e4/E;   // conduta: θ = 0 Bertrand, θ = 1 Cournot
   const ok = L1 < 1;                       // L0 < L1, então L1 < 1 garante os dois
   const fator = e => (1-e)*(1-L0)/(1-L1) - 1;
-  return {e1,e2,s1,s2,dH,H1,L0,L1,ok, n0:1e4/HHI0, n1:1e4/H1, fator,
+  return {e1,e2,s1,s2,dH,H1,L0,L1,ok,theta, n0:1e4/HHI0, n1:1e4/H1, fator,
           dP0: ok ? fator(0) : null, dP: ok ? fator(p.efi/100) : null,
           eStar: ok ? 1-(1-L1)/(1-L0) : null};
 }
@@ -969,8 +1019,8 @@ function simular(p){
   }
   return {meses, fuel, fus, dM};
 }
-const REFS = new Map();                               // referência no mesmo horizonte do cenário
-const refDe = hor => REFS.get(hor) || (REFS.set(hor, simular(Object.assign({}, DEF, {hor}))), REFS.get(hor));
+// referência = cenário‑base com as mesmas premissas e o mesmo horizonte do cenário em análise
+const refDe = p => simular(Object.assign({}, DEF, premissas(p), {fus:"NONE", hor:p.hor}));
 
 // soma anual: meses observados + projetados (o ano corrente mistura os dois)
 function anualSim(r, desde){
@@ -986,7 +1036,23 @@ function anualSim(r, desde){
 
 /* ---------- controles ---------- */
 function montaControles(){
-  for(const q of PARAMS){
+  for(const q of PRE){
+    const card = document.createElement("div");
+    card.className = "pcard";
+    card.innerHTML = `<label class="sl" id="sl-${q.id}"><span class="sl-top"><span>${q.lab}</span>
+        <output id="o-${q.id}" for="p-${q.id}"></output></span>
+      <select id="s-${q.id}" aria-label="Fonte para ${q.lab}">
+        ${q.opts.map(([v,t])=>`<option value="${v}">${t}</option>`).join("")}
+        <option value="custom" disabled>Valor próprio (ajuste no controle)</option></select>
+      <input type="range" id="p-${q.id}" min="${q.min}" max="${q.max}" step="${q.step}" value="${sim[q.id]}"
+        aria-label="${q.lab}">
+      <span class="sl-hint">${q.hint}</span></label>`;
+    document.getElementById("sim-prem").appendChild(card);
+    card.querySelector("select").addEventListener("change",ev=>{
+      if(ev.target.value!=="custom"){ sim[q.id] = Number(ev.target.value); mudou(); } });
+    card.querySelector("input").addEventListener("input",ev=>{ sim[q.id] = Number(ev.target.value); mudou(); });
+  }
+  for(const q of CEN){
     const lab = document.createElement("label");
     lab.className = "sl"; lab.id = "sl-"+q.id;
     lab.innerHTML = `<span class="sl-top"><span>${q.lab}</span><output id="o-${q.id}" for="p-${q.id}"></output></span>
@@ -1006,8 +1072,8 @@ function montaControles(){
   const pr = document.getElementById("sim-presets");
   pr.innerHTML = PRESETS.map(([id,t])=>`<button type="button" data-v="${id}">${t}</button>`).join("");
   pr.addEventListener("click",ev=>{ const b = ev.target.closest("button[data-v]"); if(!b) return;
-    const p = PRESETS.find(x=>x[0]===b.dataset.v); const hor = sim.hor;
-    Object.assign(sim, DEF, p[2], {hor}); mudou(); });
+    const p = PRESETS.find(x=>x[0]===b.dataset.v);
+    Object.assign(sim, DEF, p[2], premissas(sim), {hor:sim.hor}); mudou(); });
 }
 function sincControles(){
   for(const q of PARAMS){
@@ -1020,7 +1086,12 @@ function sincControles(){
   document.getElementById("sl-efi").classList.toggle("off", off);
   for(const [id,key] of [["sim-fus","fus"],["sim-hor","hor"]])
     [...document.getElementById(id).children].forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.v===String(sim[key]))));
-  const igual = (a,b) => PARAMS.every(q=>Math.abs(a[q.id]-b[q.id])<1e-9) && a.fus===b.fus;
+  const igual = (a,b) => CEN.every(q=>Math.abs(a[q.id]-b[q.id])<1e-9) && a.fus===b.fus;
+  for(const q of PRE){
+    const sel = document.getElementById("s-"+q.id), op = q.opts.find(o=>Math.abs(o[0]-sim[q.id])<1e-9);
+    sel.value = op ? String(op[0]) : "custom";
+    sel.title = op ? op[1] : "Valor próprio";
+  }
   [...document.getElementById("sim-presets").children].forEach(b=>{
     const p = PRESETS.find(x=>x[0]===b.dataset.v);
     b.setAttribute("aria-pressed", String(igual(sim, Object.assign({}, DEF, p[2]))));
@@ -1176,7 +1247,7 @@ function simBridge(r, A){
   const fz = r.fus;
   const lfus = !fz ? "nenhuma" : fz.ok ? sg(r.dM*100,1)+"%" : "não aplicada";
   document.getElementById("sim-bridge").innerHTML = `
-    <li><span>Combustível: ${nf(sim.rep,0)}% × ${nf(sim.fat,0)}% × ${sg(sim.qav,0)}%</span><span>${sg(r.fuel*100,1)}%</span></li>
+    <li><span>Combustível: ${nf(sim.rep,0)}% × ${nf(sim.fat,1)}% × ${sg(sim.qav,0)}%</span><span>${sg(r.fuel*100,1)}%</span></li>
     <li><span>Fusão${fz?` (${NOME_EMP(fz.e1)} + ${NOME_EMP(fz.e2)})`:""}</span><span>${lfus}</span></li>
     <li><span>Tendência real até ${sim.hor}</span><span>${sg(tend*100,1)}%</span></li>
     <li class="tot"><span>Tarifa real em ${sim.hor} (produto)</span><span>${sg(tot*100,1)}%</span></li>
@@ -1202,20 +1273,23 @@ function simFusao(r){
     return;
   }
   const L = v => v<1 ? nf(v,2) : "≥ 1";
+  const cournot = fusao(sim, 1);
   out.innerHTML = `<p class="note">${NOME_EMP(fz.e1)} (${nf(fz.s1*100,1)}%) + ${NOME_EMP(fz.e2)}
       (${nf(fz.s2*100,1)}%) = ${nf((fz.s1+fz.s2)*100,1)}% do RPK doméstico de ${D.meta.ano_cheio}.</p>
     <table class="mini"><thead><tr><th></th><th>Antes</th><th>Depois</th></tr></thead><tbody>
       <tr><td>HHI</td><td class="num">${nf(HHI0,0)}</td><td class="num">${nf(fz.H1,0)}</td></tr>
       <tr><td>Concorrentes efetivos (1/HHI)</td><td class="num">${nf(fz.n0,1)}</td><td class="num">${nf(fz.n1,1)}</td></tr>
-      <tr><td>Lerner de Cournot, HHI/|ε|</td><td class="num">${L(fz.L0)}</td><td class="num">${L(fz.L1)}</td></tr>
+      <tr><td>Lerner, θ·HHI/|ε| (θ = ${nf(fz.theta,2)})</td><td class="num">${L(fz.L0)}</td><td class="num">${L(fz.L1)}</td></tr>
     </tbody></table>
     <div class="flag">ΔHHI ${sg(fz.dH,0)} · ${faixaHMG(fz.H1,fz.dH)} (Merger Guidelines 2010).</div>
-    ${fz.ok ? `<ul class="bridge">
-      <li><span>Preço, sem eficiência</span><span>${sg(fz.dP0*100,1)}%</span></li>
-      <li><span>Preço, com ${nf(sim.efi,0)}% de eficiência</span><span>${sg(fz.dP*100,1)}%</span></li>
-      <li class="tot"><span>Eficiência que zera o aumento</span><span>${nf(fz.eStar*100,1)}%</span></li></ul>`
-    : `<div class="flag warn">Com |ε| = ${nf(Math.abs(sim.ep),2)} e HHI ${nf(fz.H1,0)}, |ε| ≤ HHI/10.000:
-       não há equilíbrio de Cournot e o efeito‑preço não é aplicado. Torne a demanda mais elástica.</div>`}`;
+    <ul class="bridge">
+      <li><span>Preço sem eficiência · Bertrand (θ = 0)</span><span>${sg(fusao(sim,0).dP0*100,1)}%</span></li>
+      <li><span>Preço sem eficiência · Cournot (θ = 1)</span><span>${cournot.ok ? sg(cournot.dP0*100,1)+"%" : "sem equilíbrio"}</span></li>
+      ${fz.ok ? `<li class="tot"><span>Preço com θ = ${nf(fz.theta,2)} e ${nf(sim.efi,0)}% de eficiência</span><span>${sg(fz.dP*100,1)}%</span></li>
+      <li><span>Eficiência que zera o aumento</span><span>${nf(fz.eStar*100,1)}%</span></li>` : ""}</ul>
+    ${fz.ok ? "" : `<div class="flag warn">Com θ = ${nf(fz.theta,2)}, |ε| = ${nf(Math.abs(sim.ep),2)} e HHI ${nf(fz.H1,0)},
+       θ·HHI/10.000 ≥ |ε|: não há equilíbrio e o efeito‑preço não é aplicado. Torne a demanda mais
+       elástica ou reduza θ.</div>`}`;
   if(!fz.ok) return;
 
   // ΔP em função da eficiência
@@ -1268,7 +1342,7 @@ function simTabela(A, Aref){
       * ano com meses observados e projetados. Tarifa: média dos meses projetados.</td></tr>`;
 }
 function simCSV(){
-  const r = simular(sim), refM = refDe(sim.hor).meses;
+  const r = simular(sim), refM = refDe(sim).meses;
   const f = v => String(+v.toFixed(4)).replace(".",",");
   const linhas = [["ano","mes","tipo","demanda_rpk","referencia_rpk","teto_rpk","atendido_rpk","spill_rpk",
                    "ask_disponivel","ask_voado","ocupacao","passageiros","indice_tarifa"].join(";")];
@@ -1285,7 +1359,7 @@ function simCSV(){
 }
 
 function simRender(){
-  const r = simular(sim), ref = refDe(sim.hor);
+  const r = simular(sim), ref = refDe(sim);
   const A = anualSim(r, 2019), Aref = anualSim(ref, 2019);
   simKpis(r, A, Aref); gSim(r, ref); simBridge(r, A); simFusao(r); simTabela(A, Aref);
 }
