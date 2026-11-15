@@ -17,6 +17,11 @@ de onde vêm os dados e como ele é construído.
 - **Aeroportos e rotas** — movimento por aeroporto no último ano fechado, comparado ao nível de 2019,
   e os pares de aeroportos mais movimentados.
 - Filtros de mercado (doméstico, internacional, total) e de período, além da série anual em tabela.
+- **Simulador de cenários** (mercado doméstico) — projeta a demanda mês a mês até 2028, 2030 ou
+  2035 a partir dos últimos 12 meses, com parâmetros ajustáveis de PIB e elasticidade‑renda, tarifa e
+  elasticidade‑preço, choque do querosene e repasse, fusão entre companhias (HHI, Lerner de Cournot e
+  eficiência de equilíbrio de Williamson) e capacidade (oferta disponível, ocupação máxima e spill).
+  Tem cenários prontos, link compartilhável (`#sim=...`), tabela anual e exportação em CSV.
 
 ## Fonte
 

@@ -147,10 +147,72 @@ footer{border-top:1px solid var(--line); margin-top:28px; padding-top:18px;
 footer a{color:var(--accent)}
 footer p{margin:0 0 8px}
 
+/* ---------- simulador ---------- */
+.jump{margin-left:auto; align-self:flex-end; font-size:13px; font-weight:500; color:var(--accent);
+  text-decoration:none; border:1px solid var(--line); background:var(--surface); border-radius:8px;
+  padding:7px 13px; box-shadow:var(--shadow)}
+.jump:hover{border-color:var(--accent)}
+.jump:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.sim .eyebrow{color:var(--accent); margin-bottom:6px}
+.sim-head{display:flex; flex-wrap:wrap; gap:10px 18px; align-items:flex-end; margin:4px 0 18px}
+.seg.wrapit{flex-wrap:wrap}
+.btn-lite{font:inherit; font-size:12.5px; color:var(--ink-2); background:var(--surface); border:1px solid var(--line);
+  border-radius:8px; padding:6px 11px; cursor:pointer}
+.btn-lite:hover{color:var(--ink); border-color:var(--ink-3)}
+.btn-lite:focus-visible{outline:2px solid var(--accent); outline-offset:1px}
+.sim-acts{display:flex; gap:8px; align-items:center; flex-wrap:wrap}
+.sim-acts .ok{font-size:12px; color:var(--ink-3)}
+.sim .kpis{margin-bottom:20px}
+.sim-grid{display:grid; grid-template-columns:292px minmax(0,1fr); gap:24px; align-items:start}
+.sim-params fieldset{border:0; margin:0 0 14px; padding:0 0 12px; border-bottom:1px solid var(--line-soft); min-width:0}
+.sim-params fieldset:last-child{border-bottom:0; margin-bottom:0}
+.sim-params legend{font-size:14px; font-weight:600; padding:0; margin-bottom:9px; display:flex; gap:8px;
+  align-items:baseline; width:100%}
+.tag{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.1em; color:var(--ink-3);
+  text-transform:uppercase; font-weight:500}
+.sl{display:block; margin:0 0 10px}
+.sl-top{display:flex; justify-content:space-between; gap:8px; font-size:12.5px; color:var(--ink-2)}
+.sl-top output{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; color:var(--ink);
+  font-weight:500; white-space:nowrap}
+.sl input[type=range]{width:100%; accent-color:var(--accent); margin:5px 0 0; cursor:pointer}
+.sl input[type=range]:disabled{cursor:not-allowed}
+.sl.off{opacity:.45}
+.sl-hint{display:block; font-size:11.5px; color:var(--ink-3); line-height:1.35; margin-top:1px}
+.sim-params .seg{margin-bottom:10px}
+.sim-params .seg button{padding:5px 9px; font-size:12.5px}
+.sim-main h3, .card h3{font-size:14px; font-weight:600; margin:0 0 4px; letter-spacing:-.01em}
+.sim-main .note, .card .note{margin:0 0 10px; color:var(--ink-2); font-size:12.5px}
+.sim-cards{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:16px}
+.card{border:1px solid var(--line); border-radius:10px; padding:14px 14px 12px; background:var(--surface); min-width:0}
+.bridge{list-style:none; margin:0; padding:0; font-size:13px}
+.bridge li{display:flex; justify-content:space-between; gap:10px; padding:5px 0; border-bottom:1px solid var(--line-soft)}
+.bridge li span:first-child{color:var(--ink-2)}
+.bridge li span:last-child{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-weight:500; white-space:nowrap}
+.bridge li.tot{border-bottom:0; border-top:1px solid var(--line); font-weight:600}
+.bridge li.tot span:first-child{color:var(--ink)}
+.mini{width:100%; min-width:0; font-size:12.5px; margin-bottom:8px}
+.mini th,.mini td{padding:5px 6px}
+.flag{font-size:12px; color:var(--ink-2); background:var(--surface-2); border-radius:8px; padding:7px 9px; margin:6px 0 8px}
+.flag.warn{color:#a32e2d; background:rgba(227,73,72,.10)}
+:root[data-theme="dark"] .flag.warn{color:#f08c8b}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .flag.warn{color:#f08c8b} }
+.sim details{margin-top:14px; font-size:13px; color:var(--ink-2); max-width:84ch}
+.sim summary{cursor:pointer; color:var(--accent); font-size:12.5px; padding:4px 0}
+.sim summary:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.sim details p{margin:8px 0}
+.eq{font-family:"IBM Plex Mono",monospace; font-size:12px; background:var(--surface-2); border-radius:8px;
+  padding:9px 11px; color:var(--ink); overflow-x:auto; white-space:pre; line-height:1.6}
+.row-acts{display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-top:14px}
+
+@media (max-width:980px){
+  .sim-grid{grid-template-columns:1fr}
+}
 @media (max-width:860px){
   .kpis{grid-template-columns:repeat(2,1fr)}
   .kpi:last-child{grid-column:span 2}
   .duo{grid-template-columns:1fr}
+  .sim-cards{grid-template-columns:1fr}
+  .jump{margin-left:0}
 }
 @media (prefers-reduced-motion: reduce){ *{transition:none!important} }
 </style>
@@ -161,7 +223,8 @@ footer p{margin:0 0 8px}
     <h1>Demanda, oferta e concentração</h1>
     <p class="dek">Vinte e seis anos de voos regulares no Brasil, a partir dos microdados da ANAC:
       quanto de assento foi ofertado, quanto foi ocupado e como o mercado se reorganizou depois de
-      cada choque do setor.</p>
+      cada choque do setor. No fim da página, um simulador projeta o mercado doméstico sob cenários
+      de renda, tarifa, combustível, fusão e capacidade.</p>
     <div class="stamp mono">
       <span>Fonte: <b>ANAC — Dados Estatísticos do Transporte Aéreo</b></span>
       <span>Série até <b id="hdr-ate"></b></span>
@@ -184,6 +247,7 @@ footer p{margin:0 0 8px}
         <button type="button" data-v="2019" aria-pressed="false">Desde 2019</button>
       </div>
     </label>
+    <a class="jump" href="#simulador">Simulador de cenários ↓</a>
   </div>
 
   <div class="kpis" id="kpis"></div>
@@ -234,6 +298,105 @@ footer p{margin:0 0 8px}
     </section>
   </div>
 
+  <section class="block sim" id="simulador" aria-labelledby="sim-h">
+    <p class="eyebrow">Previsão e simulação de cenários</p>
+    <h2 id="sim-h">Simulador do mercado doméstico</h2>
+    <p class="note">Parte dos últimos 12 meses observados e projeta a demanda mês a mês até o
+      horizonte escolhido, preservando a sazonalidade. Mude os parâmetros à esquerda: renda e tarifa
+      deslocam a demanda (EAV2); o querosene e uma fusão mudam o preço (MIC3–MIC5); a oferta limita o
+      que pode ser atendido (spill, EAV2/EAV5). O tracejado cinza é a referência, para comparação.
+      Os filtros do topo não afetam o simulador.</p>
+
+    <div class="sim-head">
+      <div class="ctl"><span>Cenários prontos</span>
+        <div class="seg wrapit" id="sim-presets" role="group" aria-label="Cenários prontos"></div>
+      </div>
+      <div class="ctl"><span>Horizonte</span>
+        <div class="seg" id="sim-hor" role="group" aria-label="Horizonte da projeção"></div>
+      </div>
+      <div class="sim-acts">
+        <button type="button" class="btn-lite" id="sim-link">Copiar link do cenário</button>
+        <span class="ok" id="sim-ok" aria-live="polite"></span>
+      </div>
+    </div>
+
+    <div class="kpis" id="sim-kpis"></div>
+
+    <div class="sim-grid">
+      <form class="sim-params" id="sim-form" onsubmit="return false">
+        <fieldset id="fs-dem"><legend>Demanda <span class="tag">EAV2 · MIC1</span></legend></fieldset>
+        <fieldset id="fs-cus"><legend>Custo do combustível <span class="tag">MIC3 · MIC4</span></legend></fieldset>
+        <fieldset id="fs-fus"><legend>Fusão <span class="tag">EAV4 · MIC5</span></legend>
+          <div class="seg wrapit" id="sim-fus" role="group" aria-label="Fusão simulada"></div>
+        </fieldset>
+        <fieldset id="fs-cap"><legend>Capacidade <span class="tag">EAV2 · EAV5</span></legend></fieldset>
+      </form>
+
+      <div class="sim-main">
+        <ul class="legend">
+          <li><span class="swatch ln" style="background:var(--s1)"></span>RPK observado</li>
+          <li><span class="swatch ln" style="background:var(--s2)"></span>Demanda do cenário</li>
+          <li><span class="swatch ln" style="background:var(--ink-3)"></span>Referência</li>
+          <li><span class="swatch ln" style="background:var(--s4)"></span>Teto de capacidade</li>
+          <li><span class="swatch" style="background:var(--s8);opacity:.5"></span>Spill (demanda não atendida)</li>
+        </ul>
+        <div class="chart" id="c-sim"><div class="tip" id="t-sim"></div></div>
+
+        <div class="sim-cards">
+          <div class="card">
+            <h3>Da tarifa de hoje à do cenário</h3>
+            <p class="note">Variação real da tarifa média em <b class="sim-hano"></b>, frente aos
+              últimos 12 meses, e o efeito sobre a demanda.</p>
+            <ul class="bridge" id="sim-bridge"></ul>
+          </div>
+          <div class="card">
+            <h3>Fusão: concentração e poder de mercado</h3>
+            <div id="sim-fusout"></div>
+            <div class="chart" id="c-will"><div class="tip" id="t-will"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row-acts">
+      <button class="toggle" id="bt-simtab" aria-expanded="false" aria-controls="sim-tab">Mostrar tabela anual do cenário</button>
+      <button type="button" class="btn-lite" id="sim-csv">Baixar CSV mensal</button>
+    </div>
+    <div class="tablewrap" id="sim-tab" hidden><table id="tb-sim">
+      <thead><tr>
+        <th>Ano</th><th>Demanda (bi RPK)</th><th>Atendida (bi RPK)</th><th>vs. ref.</th><th>Passageiros (mi)</th>
+        <th>ASK (bi)</th><th>Ocupação</th><th>Spill</th><th>Tarifa (hoje = 100)</th>
+      </tr></thead><tbody></tbody>
+    </table></div>
+
+    <details>
+      <summary>Como o simulador calcula</summary>
+      <p>A demanda tem elasticidade constante (curva log × log, MIC5). Cada mês projetado parte do mesmo
+        mês nos últimos 12 meses observados (o que mantém a sazonalidade) e anda <i>k</i> anos:</p>
+      <div class="eq">RPK_dem = RPK_base(mês) × (1 + g_PIB)^(ε_renda·k) × P_k^ε_preço
+P_k     = (1 + tendência)^k × (1 + ΔP_combustível) × (1 + ΔP_fusão)
+ΔP_combustível = repasse × peso do combustível × Δquerosene</div>
+      <p><b>Fusão.</b> HHI depois = HHI antes + 2·s₁·s₂·10.000, com as participações em RPK do último
+        ano fechado. O poder de mercado vem de Cournot (MIC5): L = (P − CMg)/P = 1/(n·|ε|); com
+        empresas desiguais, n é o número de concorrentes efetivos 1/HHI (EAV4), ou seja, L = HHI/(10.000·|ε|).
+        Com custo marginal constante, P = CMg/(1 − L), e a fusão muda o preço em
+        (1 − e)·(1 − L_antes)/(1 − L_depois) − 1, onde <i>e</i> é a redução do custo marginal por
+        eficiência. A eficiência que zera o aumento de preço é o ponto de equilíbrio do <i>trade‑off</i> de
+        Williamson (EAV4). Se |ε| ≤ HHI/10.000, não há equilíbrio de Cournot e o efeito não é aplicado.</p>
+      <div class="eq">ASK_disponível = ASK_base(mês) × (1 + g_oferta)^k
+RPK_atendido   = min(RPK_dem, ASK_disponível × ocupação máxima)      spill = RPK_dem − RPK_atendido
+ASK_voado      = min(ASK_disponível, RPK_dem ÷ ocupação do mês‑base)</div>
+      <p>Ou seja: enquanto há frota, as empresas ajustam a oferta à demanda e a ocupação fica a do
+        período‑base; quando a frota não basta, a ocupação sobe até o teto e o excedente é demanda
+        perdida (spill, a diferença entre demanda irrestrita e tráfego, EAV2/EAV5).</p>
+      <p><b>Limites.</b> O painel não mede preço: as elasticidades são hipóteses da literatura (EAV2), não
+        estimativas. O HHI nacional não é o mercado relevante de um caso antitruste, que é a rota, e o
+        Cournot tende a superestimar margens — leia a fusão pela comparação antes × depois e pela
+        eficiência de equilíbrio, não pelo nível do preço. Passageiros = RPK ÷ etapa média do mesmo mês
+        no período‑base. O último mês observado pode ser preliminar.</p>
+    </details>
+  </section>
+
   <section class="block">
     <h2>Série anual</h2>
     <p class="note">Os mesmos números dos gráficos, em tabela.</p>
@@ -257,6 +420,10 @@ footer p{margin:0 0 8px}
       considerando apenas aeroportos brasileiros. O HHI é calculado sobre a participação em RPK de
       todas as empresas do mercado no ano, incluindo as agrupadas em “outras”. O último mês da série
       pode ser preliminar.</p>
+    <p><b>Simulador.</b> Projeção de cenários, não previsão estatística: demanda de elasticidade
+      constante a partir dos últimos 12 meses do mercado doméstico, com elasticidades e custos como
+      hipóteses ajustáveis (não há dados de tarifa no painel). Fusão via HHI e Cournot (Lerner =
+      HHI/|ε|). Detalhes em “Como o simulador calcula”.</p>
   </footer>
 </div>
 
@@ -721,11 +888,413 @@ function tabelas(){
   }).join("");
 }
 
+/* ================= simulador de cenários (mercado doméstico) ================= */
+const sg = (v,d=1)=>{ const r = Math.round(v*10**d)/10**d;      // número com sinal tipográfico
+  return (r>0?"+":r<0?"−":"")+nf(Math.abs(r),d); };
+const SIM_BASE = SERIE.DOM.slice(-12);                 // período‑base: últimos 12 meses observados
+const ULT = SIM_BASE[SIM_BASE.length-1];
+const HHI0 = HHI.DOM?.get(D.meta.ano_cheio)?.hhi || 0;
+const SH0 = new Map(D.share.filter(s=>s.n==="DOM" && s.a===D.meta.ano_cheio && s.e!=="OUTRAS")
+                           .map(s=>[s.e,s.sh]));
+const FUSOES = [["NONE","Nenhuma"],["GLO+AZU","GOL + Azul"],["TAM+GLO","LATAM + GOL"],["TAM+AZU","LATAM + Azul"]]
+  .filter(([v])=>v==="NONE" || v.split("+").every(e=>SH0.has(e)));
+const HORIZ = [ULT.a+2, ULT.a+4, ULT.a+9];
+
+// Parâmetros numéricos: um controle deslizante para cada. "def" é o cenário de referência.
+const PARAMS = [
+  {id:"pib", g:"dem", lab:"Crescimento do PIB", min:-3, max:5, step:0.1, def:2.0,
+   fmt:v=>sg(v,1)+"% a.a.", hint:"Desloca a curva de demanda (renda)."},
+  {id:"ey",  g:"dem", lab:"Elasticidade‑renda", min:0.5, max:3, step:0.1, def:1.5,
+   fmt:v=>nf(v,1), hint:"% de RPK para cada 1% de PIB."},
+  {id:"tar", g:"dem", lab:"Tendência real da tarifa", min:-4, max:4, step:0.5, def:0,
+   fmt:v=>sg(v,1)+"% a.a.", hint:"Movimento ao longo da curva (yield)."},
+  {id:"ep",  g:"dem", lab:"Elasticidade‑preço", min:-2, max:-0.3, step:0.05, def:-1.0,
+   fmt:v=>nf(v,2), hint:"Também define o poder de mercado da fusão."},
+  {id:"qav", g:"cus", lab:"Variação do querosene", min:-50, max:100, step:5, def:0,
+   fmt:v=>sg(v,0)+"%", hint:"Choque permanente no preço do QAV."},
+  {id:"fat", g:"cus", lab:"Peso do combustível no custo", min:15, max:50, step:1, def:35,
+   fmt:v=>nf(v,0)+"%", hint:"Valor de partida; confira no anuário da ANAC."},
+  {id:"rep", g:"cus", lab:"Repasse à tarifa", min:0, max:100, step:5, def:100,
+   fmt:v=>nf(v,0)+"%", hint:"100% = longo prazo (P proporcional ao CMg)."},
+  {id:"efi", g:"fus", lab:"Ganho de eficiência", min:0, max:30, step:1, def:0,
+   fmt:v=>nf(v,0)+"% do CMg", hint:"Redução do custo marginal da fusão."},
+  {id:"cap", g:"cap", lab:"Oferta disponível (ASK)", min:-3, max:8, step:0.5, def:3.0,
+   fmt:v=>sg(v,1)+"% a.a.", hint:"Frota e malha. Se a demanda cair, voa‑se menos."},
+  {id:"lfm", g:"cap", lab:"Ocupação máxima", min:80, max:95, step:1, def:88,
+   fmt:v=>nf(v,0)+"%", hint:"Acima disso a demanda vira spill."},
+];
+const DEF = Object.fromEntries(PARAMS.map(q=>[q.id,q.def]));
+DEF.fus = "NONE"; DEF.hor = HORIZ[1];
+const PRESETS = [
+  ["ref",   "Referência",          {}],
+  ["fraco", "Crescimento fraco",   {pib:0.5}],
+  ["otim",  "Otimista",            {pib:3.0, tar:-1}],
+  ["qav",   "Choque do querosene", {qav:40}],
+  ["fusao", "Fusão GOL + Azul",    {fus:"GLO+AZU"}],
+  ["frota", "Gargalo de frota",    {cap:0.5}],
+].filter(p=>!p[2].fus || FUSOES.some(f=>f[0]===p[2].fus));
+const sim = Object.assign({}, DEF);
+
+function fusao(p){
+  if(p.fus==="NONE") return null;
+  const [e1,e2] = p.fus.split("+");
+  const s1 = SH0.get(e1)||0, s2 = SH0.get(e2)||0;
+  const dH = 2*s1*s2*1e4, H1 = HHI0 + dH, E = Math.abs(p.ep);
+  const L0 = HHI0/1e4/E, L1 = H1/1e4/E;
+  const ok = L1 < 1;                       // L0 < L1, então L1 < 1 garante os dois
+  const fator = e => (1-e)*(1-L0)/(1-L1) - 1;
+  return {e1,e2,s1,s2,dH,H1,L0,L1,ok, n0:1e4/HHI0, n1:1e4/H1, fator,
+          dP0: ok ? fator(0) : null, dP: ok ? fator(p.efi/100) : null,
+          eStar: ok ? 1-(1-L1)/(1-L0) : null};
+}
+
+function simular(p){
+  const fuel = (p.rep/100)*(p.fat/100)*(p.qav/100);
+  const fus = fusao(p);
+  const dM = fus && fus.ok ? fus.dP : 0;
+  const N = (p.hor-ULT.a)*12 + (12-ULT.m);
+  const meses = [];
+  for(let t=1; t<=N; t++){
+    const b = SIM_BASE[(t-1)%12], k = Math.floor((t-1)/12)+1;   // mesmo mês do período‑base, k anos à frente
+    const z = ULT.m-1+t, a = ULT.a+Math.floor(z/12), m = z%12+1;
+    const P = Math.pow(1+p.tar/100,k)*(1+fuel)*(1+dM);
+    const dem = b.rpk*Math.pow(1+p.pib/100, p.ey*k)*Math.pow(P, p.ep);
+    // As empresas ajustam a oferta à demanda mantendo a ocupação do período‑base; quando a oferta
+    // disponível não basta, voam tudo, a ocupação sobe até o teto e o excedente vira spill.
+    const disp = b.ask*Math.pow(1+p.cap/100, k);
+    const lft = Math.min(b.rpk/b.ask, p.lfm/100);
+    const ask = Math.min(disp, dem/lft);
+    const lim = disp*p.lfm/100, serv = Math.min(dem, lim), km = b.rpk/b.pax;
+    meses.push({a,m,k,P,dem,disp,ask,lim,serv,spill:dem-serv,lf:serv/ask,pax:serv/km});
+  }
+  return {meses, fuel, fus, dM};
+}
+const REFS = new Map();                               // referência no mesmo horizonte do cenário
+const refDe = hor => REFS.get(hor) || (REFS.set(hor, simular(Object.assign({}, DEF, {hor}))), REFS.get(hor));
+
+// soma anual: meses observados + projetados (o ano corrente mistura os dois)
+function anualSim(r, desde){
+  const m = new Map();
+  const get = a => m.get(a) || (m.set(a,{a,dem:0,serv:0,spill:0,ask:0,pax:0,nP:0,sP:0,proj:0,obs:0,nsp:0}), m.get(a));
+  for(const o of SERIE.DOM){ if(o.a<desde) continue;
+    const y = get(o.a); y.dem+=o.rpk; y.serv+=o.rpk; y.ask+=o.ask; y.pax+=o.pax; y.obs++; }
+  for(const o of r.meses){ const y = get(o.a);
+    y.dem+=o.dem; y.serv+=o.serv; y.spill+=o.spill; y.ask+=o.ask; y.pax+=o.pax; y.proj++;
+    y.sP+=o.P; y.nP++; if(o.spill>1) y.nsp++; }
+  return [...m.values()].sort((x,y)=>x.a-y.a);
+}
+
+/* ---------- controles ---------- */
+function montaControles(){
+  for(const q of PARAMS){
+    const lab = document.createElement("label");
+    lab.className = "sl"; lab.id = "sl-"+q.id;
+    lab.innerHTML = `<span class="sl-top"><span>${q.lab}</span><output id="o-${q.id}" for="p-${q.id}"></output></span>
+      <input type="range" id="p-${q.id}" min="${q.min}" max="${q.max}" step="${q.step}" value="${sim[q.id]}">
+      <span class="sl-hint">${q.hint}</span>`;
+    document.getElementById("fs-"+q.g).appendChild(lab);
+    lab.querySelector("input").addEventListener("input",ev=>{ sim[q.id] = Number(ev.target.value); mudou(); });
+  }
+  const seg = (id, itens, key, cast) => {
+    const el = document.getElementById(id);
+    el.innerHTML = itens.map(([v,t])=>`<button type="button" data-v="${v}">${t}</button>`).join("");
+    el.addEventListener("click",ev=>{ const b = ev.target.closest("button[data-v]"); if(!b) return;
+      sim[key] = cast(b.dataset.v); mudou(); });
+  };
+  seg("sim-fus", FUSOES, "fus", String);
+  seg("sim-hor", HORIZ.map(h=>[h,String(h)]), "hor", Number);
+  const pr = document.getElementById("sim-presets");
+  pr.innerHTML = PRESETS.map(([id,t])=>`<button type="button" data-v="${id}">${t}</button>`).join("");
+  pr.addEventListener("click",ev=>{ const b = ev.target.closest("button[data-v]"); if(!b) return;
+    const p = PRESETS.find(x=>x[0]===b.dataset.v); const hor = sim.hor;
+    Object.assign(sim, DEF, p[2], {hor}); mudou(); });
+}
+function sincControles(){
+  for(const q of PARAMS){
+    const inp = document.getElementById("p-"+q.id);
+    if(Number(inp.value)!==sim[q.id]) inp.value = sim[q.id];
+    document.getElementById("o-"+q.id).textContent = q.fmt(sim[q.id]);
+  }
+  const off = sim.fus==="NONE";
+  document.getElementById("p-efi").disabled = off;
+  document.getElementById("sl-efi").classList.toggle("off", off);
+  for(const [id,key] of [["sim-fus","fus"],["sim-hor","hor"]])
+    [...document.getElementById(id).children].forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.v===String(sim[key]))));
+  const igual = (a,b) => PARAMS.every(q=>Math.abs(a[q.id]-b[q.id])<1e-9) && a.fus===b.fus;
+  [...document.getElementById("sim-presets").children].forEach(b=>{
+    const p = PRESETS.find(x=>x[0]===b.dataset.v);
+    b.setAttribute("aria-pressed", String(igual(sim, Object.assign({}, DEF, p[2]))));
+  });
+  document.querySelectorAll(".sim-hano").forEach(e=>e.textContent=sim.hor);
+}
+
+// estado no endereço (#sim=...), para compartilhar e reproduzir um cenário
+function lerHash(){
+  const m = location.hash.match(/sim=([^&]+)/); if(!m) return;
+  for(const par of decodeURIComponent(m[1]).split(",")){
+    const [k,v] = par.split(":"); const q = PARAMS.find(x=>x.id===k);
+    if(q && v!=="" && isFinite(+v)) sim[k] = Math.min(q.max, Math.max(q.min, +v));
+    else if(k==="fus" && FUSOES.some(f=>f[0]===v)) sim.fus = v;
+    else if(k==="hor" && HORIZ.includes(+v)) sim.hor = +v;
+  }
+}
+function hashAtual(){
+  return "#sim="+[...PARAMS.map(q=>q.id+":"+(+sim[q.id].toFixed(2))),"fus:"+sim.fus,"hor:"+sim.hor].join(",");
+}
+let tSim;
+function mudou(){
+  sincControles(); simRender();
+  clearTimeout(tSim);
+  tSim = setTimeout(()=>{ try{ history.replaceState(null,"",hashAtual()); }catch(e){} },250);
+}
+
+/* ---------- KPIs do cenário ---------- */
+function simKpis(r, A, Aref){
+  const H = A.find(y=>y.a===sim.hor), Hr = Aref.find(y=>y.a===sim.hor);
+  const som = (arr,k)=>arr.reduce((t,o)=>t+o[k],0);
+  const b12 = som(SIM_BASE,"rpk");
+  const ms = r.meses.filter(o=>o.a===sim.hor), kbar = ms.reduce((t,o)=>t+o.k,0)/ms.length;
+  const cagr = Math.pow(H.dem/b12, 1/kbar) - 1;       // kbar = anos médios à frente do período‑base
+  const lf = H.serv/H.ask, tar = H.sP/H.nP - 1, spillSh = H.spill/H.dem;
+  const pill = (v,txt) => `<span class="pill ${v>=0?"up":"down"}">${sg(v*100,1)}%</span> ${txt}`;
+  const cards = [
+    {lab:"Demanda RPK · "+sim.hor, v:nf(H.dem/1e9,1), u:"bi",
+     d: Math.abs(H.dem/Hr.dem-1)<5e-4 ? `${sg(cagr*100,1)}% a.a. desde os 12 m‑base` : pill(H.dem/Hr.dem-1,"vs. referência")},
+    {lab:"Passageiros · "+sim.hor, v:nf(H.pax/1e6,1), u:"mi",
+     d: Math.abs(H.pax/Hr.pax-1)<5e-4 ? `12 m‑base: ${nf(som(SIM_BASE,"pax")/1e6,1)} mi` : pill(H.pax/Hr.pax-1,"vs. referência")},
+    {lab:"Tarifa real · "+sim.hor, v:sg(tar*100,1), u:"%",
+     d:`vs. últimos 12 meses`},
+    {lab:"Ocupação · "+sim.hor, v:nf(lf*100,1), u:"%",
+     d:`teto de ${nf(sim.lfm,0)}%`},
+    {lab:"Spill · "+sim.hor, v:nf(spillSh*100,1), u:"% da demanda",
+     d: H.nsp ? `${H.nsp} ${H.nsp>1?"meses":"mês"} no teto · ${nf(H.spill/1e9,1)} bi RPK` : "nenhum mês no teto"},
+  ];
+  document.getElementById("sim-kpis").innerHTML = cards.map(c=>`<div class="kpi"><div class="lab">${c.lab}</div>
+    <div class="val mono">${c.v}<small>${c.u}</small></div><div class="delta">${c.d}</div></div>`).join("");
+}
+
+/* ---------- gráfico principal do cenário ---------- */
+function gSim(r, ref){
+  const host = document.getElementById("c-sim"), tip = document.getElementById("t-sim");
+  host.querySelectorAll("svg").forEach(e=>e.remove());
+  const obs = SERIE.DOM.filter(o=>o.a>=2019);
+  const refM = ref.meses;
+  const rows = [
+    ...obs.map(o=>({a:o.a,m:o.m,obs:o.rpk,lf:o.rpk/o.ask,ask:o.ask,pax:o.pax})),
+    ...r.meses.map((o,j)=>Object.assign({ref:refM[j]?.dem}, o)),
+  ];
+  const n = rows.length, i0 = obs.length-1;          // i0 = último mês observado
+  const W = host.clientWidth || 700;
+  const H1 = 250, H2 = 96, GAP = 26, H = H1+GAP+H2+24, padL = 46, padR = 10, padT = 16;
+  const esc = 1e9;
+  const maxY = Math.max(...rows.map(o=>Math.max(o.obs||0,o.dem||0,o.ref||0,o.lim||0)))/esc;
+  const tks = ticks(0,maxY,4), top = Math.max(tks[tks.length-1],maxY);
+  const x = i => padL + i*(W-padL-padR)/Math.max(1,n-1);
+  const y1 = v => padT + (H1-padT)*(1-v/top);
+  const lo = 0.6, hi = 1.0;
+  const y2 = v => H1+GAP + H2*(1-(Math.max(lo,Math.min(hi,v))-lo)/(hi-lo));
+  const TS = css("--ink-3"), GR = css("--grid");
+  const svg = svgEl("svg",{viewBox:`0 0 ${W} ${H}`, height:H, role:"img",
+    "aria-label":"Demanda observada e projetada, teto de capacidade e ocupação no cenário"});
+
+  for(const t of tks){
+    svg.appendChild(svgEl("line",{x1:padL,x2:W-padR,y1:y1(t),y2:y1(t),stroke:GR,"stroke-width":1}));
+    svg.appendChild(txt(padL-7,y1(t)+4,nf(t,0),{"text-anchor":"end","font-size":10.5,fill:TS,class:"mono"}));
+  }
+  svg.appendChild(txt(padL-7,padT-6,"bi RPK/mês",{"text-anchor":"start","font-size":10,fill:TS,class:"mono",x:4}));
+  for(const t of [0.6,0.8,1.0]){
+    svg.appendChild(svgEl("line",{x1:padL,x2:W-padR,y1:y2(t),y2:y2(t),stroke:GR,"stroke-width":1}));
+    svg.appendChild(txt(padL-7,y2(t)+4,nf(t*100,0)+"%",{"text-anchor":"end","font-size":10.5,fill:TS,class:"mono"}));
+  }
+  svg.appendChild(txt(padL, H1+GAP-8, "OCUPAÇÃO", {"font-size":10,fill:TS,class:"mono","letter-spacing":"0.1em"}));
+
+  // faixa projetada
+  svg.appendChild(svgEl("rect",{x:x(i0),y:padT-6,width:Math.max(0,x(n-1)-x(i0)),height:H1+GAP+H2-padT+6,
+    fill:css("--ink"),"fill-opacity":.03}));
+  svg.appendChild(svgEl("line",{x1:x(i0),x2:x(i0),y1:padT-6,y2:H1+GAP+H2,stroke:TS,"stroke-width":1,"stroke-dasharray":"2 3"}));
+  svg.appendChild(txt(x(i0)+5,padT+3,"projeção →",{"font-size":10,fill:TS,class:"mono"}));
+
+  const last = rows[i0];
+  const P = (k, from=i0+1) => [[x(i0), y1(last.obs/esc)], ...rows.slice(from).map((o,j)=>[x(from+j), y1(o[k]/esc)])];
+  // spill: área entre demanda e atendido
+  const pd = rows.slice(i0+1).map((o,j)=>[x(i0+1+j), y1(o.dem/esc)]);
+  const ps = rows.slice(i0+1).map((o,j)=>[x(i0+1+j), y1(o.serv/esc)]).reverse();
+  if(pd.length) svg.appendChild(svgEl("path",{d:path([...pd,...ps])+" Z", fill:css("--s8"), "fill-opacity":.45}));
+  // teto de capacidade
+  svg.appendChild(svgEl("path",{d:path([[x(i0), y1(last.ask*sim.lfm/100/esc)],
+    ...rows.slice(i0+1).map((o,j)=>[x(i0+1+j), y1(o.lim/esc)])]), fill:"none", stroke:css("--s4"),
+    "stroke-width":1.6, "stroke-dasharray":"1 3", "stroke-linecap":"round"}));
+  // referência e cenário
+  svg.appendChild(svgEl("path",{d:path(P("ref")), fill:"none", stroke:TS, "stroke-width":1.5, "stroke-dasharray":"5 4"}));
+  svg.appendChild(svgEl("path",{d:path(P("dem")), fill:"none", stroke:css("--s2"), "stroke-width":2, "stroke-linejoin":"round"}));
+  // observado
+  svg.appendChild(svgEl("path",{d:path(rows.slice(0,i0+1).map((o,i)=>[x(i), y1(o.obs/esc)])), fill:"none",
+    stroke:css("--s1"), "stroke-width":2, "stroke-linejoin":"round"}));
+  // ocupação: observada + atendida/ASK no cenário, e o teto
+  svg.appendChild(svgEl("path",{d:path(rows.map((o,i)=>[x(i), y2(o.lf)])), fill:"none", stroke:css("--s7"),
+    "stroke-width":1.8, "stroke-linejoin":"round"}));
+  svg.appendChild(svgEl("line",{x1:x(i0),x2:W-padR,y1:y2(sim.lfm/100),y2:y2(sim.lfm/100),stroke:css("--s4"),
+    "stroke-width":1.4,"stroke-dasharray":"1 3","stroke-linecap":"round"}));
+
+  const anos = [...new Set(rows.map(o=>o.a))];
+  const passo = Math.ceil(anos.length/Math.max(4,Math.floor(W/70)));
+  anos.forEach((a,k)=>{ if(k%passo) return;
+    const i = rows.findIndex(o=>o.a===a);
+    svg.appendChild(txt(x(i), H-6, a, {"text-anchor":"middle","font-size":10.5,fill:TS,class:"mono"})); });
+
+  const cross = svgEl("line",{x1:0,x2:0,y1:padT-4,y2:H1+GAP+H2,stroke:css("--ink-2"),"stroke-width":1,opacity:0});
+  const dot = svgEl("circle",{r:4,fill:css("--s2"),stroke:css("--surface"),"stroke-width":2,opacity:0});
+  svg.append(cross,dot);
+  const row = (c,nm,v) => `<div class="row"><span class="nm">${c?`<span class="swatch" style="background:${c}"></span>`:""}${nm}</span><span class="vl">${v}</span></div>`;
+  svg.appendChild(hoverLayer(host,tip,W,H,padL,padR,n,i=>{
+    if(i==null){ cross.setAttribute("opacity",0); dot.setAttribute("opacity",0); return; }
+    const o = rows[i], X = x(i);
+    cross.setAttribute("x1",X); cross.setAttribute("x2",X); cross.setAttribute("opacity",.45);
+    const yv = o.obs!=null ? o.obs : o.dem;
+    dot.setAttribute("cx",X); dot.setAttribute("cy",y1(yv/esc)); dot.setAttribute("opacity",1);
+    dot.setAttribute("fill", o.obs!=null ? css("--s1") : css("--s2"));
+    tip.innerHTML = o.obs!=null
+      ? `<div class="th">${MES[o.m-1]}/${o.a} · observado</div>
+         ${row("var(--s1)","RPK",nf(o.obs/esc,2)+" bi")}${row("var(--s7)","Ocupação",nf(o.lf*100,1)+"%")}
+         ${row("","Passageiros",nf(o.pax/1e6,2)+" mi")}`
+      : `<div class="th">${MES[o.m-1]}/${o.a} · projeção</div>
+         ${row("var(--s2)","Demanda",nf(o.dem/esc,2)+" bi")}${row("var(--ink-3)","Referência",nf(o.ref/esc,2)+" bi")}
+         ${row("var(--s4)","Teto",nf(o.lim/esc,2)+" bi")}${o.spill>1?row("var(--s8)","Spill",nf(o.spill/esc,2)+" bi"):""}
+         ${row("var(--s7)","Ocupação",nf(o.lf*100,1)+"%")}${row("","Passageiros",nf(o.pax/1e6,2)+" mi")}
+         ${row("","Tarifa (hoje = 100)",nf(o.P*100,1))}`;
+  }));
+  host.appendChild(svg);
+}
+
+/* ---------- composição da tarifa ---------- */
+function simBridge(r, A){
+  const H = A.find(y=>y.a===sim.hor);
+  const ms = r.meses.filter(o=>o.a===sim.hor);
+  const tend = ms.reduce((t,o)=>t+Math.pow(1+sim.tar/100,o.k),0)/ms.length - 1;
+  const tot = H.sP/H.nP - 1;
+  const efDem = Math.pow(1+tot, sim.ep) - 1;
+  const fz = r.fus;
+  const lfus = !fz ? "nenhuma" : fz.ok ? sg(r.dM*100,1)+"%" : "não aplicada";
+  document.getElementById("sim-bridge").innerHTML = `
+    <li><span>Combustível: ${nf(sim.rep,0)}% × ${nf(sim.fat,0)}% × ${sg(sim.qav,0)}%</span><span>${sg(r.fuel*100,1)}%</span></li>
+    <li><span>Fusão${fz?` (${NOME_EMP(fz.e1)} + ${NOME_EMP(fz.e2)})`:""}</span><span>${lfus}</span></li>
+    <li><span>Tendência real até ${sim.hor}</span><span>${sg(tend*100,1)}%</span></li>
+    <li class="tot"><span>Tarifa real em ${sim.hor} (produto)</span><span>${sg(tot*100,1)}%</span></li>
+    <li><span>Efeito na demanda: (1 ${tot<0?"−":"+"} ${nf(Math.abs(tot)*100,1)}%)^(${sg(sim.ep,2)})</span><span>${sg(efDem*100,1)}% RPK</span></li>`;
+}
+
+/* ---------- fusão: tabela e trade‑off de Williamson ---------- */
+function faixaHMG(H1,dH){
+  if(dH<100) return "mudança pequena na concentração (ΔHHI < 100)";
+  if(H1<1500) return "mercado resultante não concentrado";
+  if(H1<=2500) return "concentração moderada e ΔHHI > 100: potencial preocupação";
+  if(dH<=200) return "alta concentração e ΔHHI entre 100 e 200: preocupação significativa";
+  return "alta concentração e ΔHHI > 200: presume‑se aumento de poder de mercado";
+}
+function simFusao(r){
+  const out = document.getElementById("sim-fusout"), host = document.getElementById("c-will");
+  host.querySelectorAll("svg").forEach(e=>e.remove());
+  const fz = r.fus;
+  if(!fz){
+    out.innerHTML = `<p class="note">Escolha uma fusão à esquerda. Hoje (${D.meta.ano_cheio}): HHI
+      ${nf(HHI0,0)}, ${nf(1e4/HHI0,1)} concorrentes efetivos — ${[...SH0].filter(e=>e[1]>.005)
+      .map(([e,s])=>`${NOME_EMP(e)} ${nf(s*100,1)}%`).join(", ")}.</p>`;
+    return;
+  }
+  const L = v => v<1 ? nf(v,2) : "≥ 1";
+  out.innerHTML = `<p class="note">${NOME_EMP(fz.e1)} (${nf(fz.s1*100,1)}%) + ${NOME_EMP(fz.e2)}
+      (${nf(fz.s2*100,1)}%) = ${nf((fz.s1+fz.s2)*100,1)}% do RPK doméstico de ${D.meta.ano_cheio}.</p>
+    <table class="mini"><thead><tr><th></th><th>Antes</th><th>Depois</th></tr></thead><tbody>
+      <tr><td>HHI</td><td class="num">${nf(HHI0,0)}</td><td class="num">${nf(fz.H1,0)}</td></tr>
+      <tr><td>Concorrentes efetivos (1/HHI)</td><td class="num">${nf(fz.n0,1)}</td><td class="num">${nf(fz.n1,1)}</td></tr>
+      <tr><td>Lerner de Cournot, HHI/|ε|</td><td class="num">${L(fz.L0)}</td><td class="num">${L(fz.L1)}</td></tr>
+    </tbody></table>
+    <div class="flag">ΔHHI ${sg(fz.dH,0)} · ${faixaHMG(fz.H1,fz.dH)} (Merger Guidelines 2010).</div>
+    ${fz.ok ? `<ul class="bridge">
+      <li><span>Preço, sem eficiência</span><span>${sg(fz.dP0*100,1)}%</span></li>
+      <li><span>Preço, com ${nf(sim.efi,0)}% de eficiência</span><span>${sg(fz.dP*100,1)}%</span></li>
+      <li class="tot"><span>Eficiência que zera o aumento</span><span>${nf(fz.eStar*100,1)}%</span></li></ul>`
+    : `<div class="flag warn">Com |ε| = ${nf(Math.abs(sim.ep),2)} e HHI ${nf(fz.H1,0)}, |ε| ≤ HHI/10.000:
+       não há equilíbrio de Cournot e o efeito‑preço não é aplicado. Torne a demanda mais elástica.</div>`}`;
+  if(!fz.ok) return;
+
+  // ΔP em função da eficiência
+  const tip = document.getElementById("t-will");
+  const W = host.clientWidth || 320, H = 132, padL = 40, padR = 8, padT = 12, padB = 20;
+  const xmax = Math.min(0.8, Math.max(0.4, Math.ceil((fz.eStar+0.05)*10)/10));
+  const NS_ = 41, es = Array.from({length:NS_},(_,i)=>xmax*i/(NS_-1)), vs = es.map(fz.fator);
+  const ymax = Math.max(0.02, ...vs), ymin = Math.min(-0.02, ...vs);
+  const tk = ticks(ymin*100, ymax*100, 3);
+  const x = e => padL + (W-padL-padR)*e/xmax, y = v => padT + (H-padT-padB)*(ymax-v)/(ymax-ymin);
+  const TS = css("--ink-3");
+  const svg = svgEl("svg",{viewBox:`0 0 ${W} ${H}`,height:H,role:"img",
+    "aria-label":"Variação do preço após a fusão em função do ganho de eficiência"});
+  for(const t of tk){
+    svg.appendChild(svgEl("line",{x1:padL,x2:W-padR,y1:y(t/100),y2:y(t/100),stroke:css("--grid"),"stroke-width":1}));
+    svg.appendChild(txt(padL-6,y(t/100)+4,sg(t,0)+"%",{"text-anchor":"end","font-size":10,fill:TS,class:"mono"}));
+  }
+  svg.appendChild(svgEl("line",{x1:padL,x2:W-padR,y1:y(0),y2:y(0),stroke:css("--ink-3"),"stroke-width":1}));
+  for(const e of ticks(0,xmax*100,4))
+    svg.appendChild(txt(x(e/100),H-5,nf(e,0)+"%",{"text-anchor":"middle","font-size":10,fill:TS,class:"mono"}));
+  svg.appendChild(svgEl("path",{d:path(es.map((e,i)=>[x(e),y(vs[i])])),fill:"none",stroke:css("--s8"),"stroke-width":2}));
+  svg.appendChild(svgEl("circle",{cx:x(fz.eStar),cy:y(0),r:4,fill:css("--surface"),stroke:css("--ink-2"),"stroke-width":1.5}));
+  const ec = sim.efi/100;
+  svg.appendChild(svgEl("circle",{cx:x(ec),cy:y(fz.fator(ec)),r:5,fill:css("--s8"),stroke:css("--surface"),"stroke-width":2}));
+  svg.appendChild(txt(x(fz.eStar)+(x(fz.eStar)>W*0.7?-6:6), y(0)-6, "equilíbrio "+nf(fz.eStar*100,0)+"%",
+    {"font-size":10,fill:TS,class:"mono","text-anchor":x(fz.eStar)>W*0.7?"end":"start"}));
+  svg.appendChild(txt(W-padR, padT-2, "Δ preço × eficiência", {"font-size":10,fill:TS,class:"mono","text-anchor":"end"}));
+  svg.appendChild(hoverLayer(host,tip,W,H,padL,padR,NS_,i=>{
+    if(i==null) return;
+    tip.innerHTML = `<div class="th">eficiência ${nf(es[i]*100,0)}%</div>
+      <div class="row"><span class="nm">Δ preço</span><span class="vl">${sg(vs[i]*100,1)}%</span></div>`;
+  }));
+  host.appendChild(svg);
+}
+
+/* ---------- tabela anual e CSV ---------- */
+function simTabela(A, Aref){
+  const ref = new Map(Aref.map(y=>[y.a,y]));
+  document.querySelector("#tb-sim tbody").innerHTML = A.filter(y=>y.a>=D.meta.ano_cheio).map(y=>{
+    const rf = ref.get(y.a), vr = rf && y.proj ? y.serv/rf.serv-1 : null;
+    const marca = y.proj && y.obs ? " *" : "";
+    return `<tr><td class="mono">${y.a}${marca}${y.proj?"":" (obs.)"}</td>
+      <td class="num">${nf(y.dem/1e9,1)}</td><td class="num">${nf(y.serv/1e9,1)}</td>
+      <td class="num">${vr==null?"—":sg(vr*100,1)+"%"}</td>
+      <td class="num">${nf(y.pax/1e6,1)}</td><td class="num">${nf(y.ask/1e9,1)}</td>
+      <td class="num">${nf(y.serv/y.ask*100,1)}%</td>
+      <td class="num">${y.spill>1?nf(y.spill/y.dem*100,1)+"%":"—"}</td>
+      <td class="num">${y.nP?nf(y.sP/y.nP*100,1):"—"}</td></tr>`;
+  }).join("") + `<tr><td colspan="9" style="text-align:left;color:var(--ink-3);font-size:12px;white-space:normal">
+      * ano com meses observados e projetados. Tarifa: média dos meses projetados.</td></tr>`;
+}
+function simCSV(){
+  const r = simular(sim), refM = refDe(sim.hor).meses;
+  const f = v => String(+v.toFixed(4)).replace(".",",");
+  const linhas = [["ano","mes","tipo","demanda_rpk","referencia_rpk","teto_rpk","atendido_rpk","spill_rpk",
+                   "ask_disponivel","ask_voado","ocupacao","passageiros","indice_tarifa"].join(";")];
+  for(const o of SERIE.DOM) linhas.push([o.a,o.m,"observado",f(o.rpk),f(o.rpk),"",f(o.rpk),"0","",f(o.ask),
+    f(o.rpk/o.ask),f(o.pax),""].join(";"));
+  r.meses.forEach((o,j)=>linhas.push([o.a,o.m,"projetado",f(o.dem),f(refM[j].dem),f(o.lim),f(o.serv),
+    f(o.spill),f(o.disp),f(o.ask),f(o.lf),f(o.pax),f(o.P*100)].join(";")));
+  linhas.push("", "parametros;"+hashAtual().slice(5));
+  const blob = new Blob(["﻿"+linhas.join("\r\n")],{type:"text/csv;charset=utf-8"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = `cenario-aviacao-dom-${sim.hor}.csv`;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(()=>URL.revokeObjectURL(a.href), 1000);
+}
+
+function simRender(){
+  const r = simular(sim), ref = refDe(sim.hor);
+  const A = anualSim(r, 2019), Aref = anualSim(ref, 2019);
+  simKpis(r, A, Aref); gSim(r, ref); simBridge(r, A); simFusao(r); simTabela(A, Aref);
+}
+
 /* ---------------- render ---------------- */
 function render(){
   const rot = st.nat==="INT" ? "mercado internacional" : "mercado doméstico";
   document.querySelectorAll(".mkt").forEach(e=>e.textContent=rot);
-  kpis(); gSerie(); gShare(); gHHI(); gAero(); tabelas();
+  kpis(); gSerie(); gShare(); gHHI(); gAero(); tabelas(); simRender();
 }
 document.getElementById("hdr-ano").textContent = D.meta.ano_max;
 document.getElementById("hdr-ate").textContent = MES[D.meta.mes_max-1]+"/"+D.meta.ano_max;
@@ -743,6 +1312,24 @@ bt.addEventListener("click",()=>{
   const open = box.hidden;
   box.hidden = !open; bt.setAttribute("aria-expanded",String(open));
   bt.textContent = open ? "Ocultar tabela" : "Mostrar tabela";
+});
+
+// simulador
+montaControles(); lerHash(); sincControles();
+const bts = document.getElementById("bt-simtab"), boxs = document.getElementById("sim-tab");
+bts.addEventListener("click",()=>{
+  const open = boxs.hidden;
+  boxs.hidden = !open; bts.setAttribute("aria-expanded",String(open));
+  bts.textContent = open ? "Ocultar tabela anual do cenário" : "Mostrar tabela anual do cenário";
+});
+document.getElementById("sim-csv").addEventListener("click", simCSV);
+document.getElementById("sim-link").addEventListener("click", async ()=>{
+  const ok = document.getElementById("sim-ok");
+  const url = location.href.split("#")[0] + hashAtual();
+  try{ history.replaceState(null,"",hashAtual()); }catch(e){}
+  try{ await navigator.clipboard.writeText(url); ok.textContent = "Link copiado."; }
+  catch(e){ ok.textContent = "Copie da barra de endereço."; }
+  setTimeout(()=>ok.textContent="", 2500);
 });
 
 render();
