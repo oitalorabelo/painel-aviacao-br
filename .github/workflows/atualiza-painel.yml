@@ -9,7 +9,7 @@ on:
   # sem rebaixar os 359 MB da ANAC.
   push:
     branches: [main]
-    paths-ignore: ["README.md", "docs/**"]
+    paths-ignore: ["README.md", "CONTRIBUTING.md", "docs/**", ".github/pull_request_template.md", ".github/workflows/checa-pr.yml"]
   workflow_dispatch:
     inputs:
       rebaixar:

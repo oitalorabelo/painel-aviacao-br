@@ -1,0 +1,29 @@
+name: Checa PR
+
+# Monta a pagina a partir do painel.json versionado, sem publicar. Garante que um PR
+# nao quebra o build antes de ir para a main (onde cada push vai direto para o ar).
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - run: pip install -r requirements.txt
+
+      - name: Compilar scripts
+        run: python -m py_compile scripts/agrega.py scripts/build.py
+
+      - name: Montar pagina
+        run: python scripts/build.py

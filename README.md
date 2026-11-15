@@ -89,6 +89,11 @@ data/painel.json                        dados agregados, versionados
 A página não usa biblioteca de gráficos: os SVGs são desenhados à mão, e a única dependência externa
 são as fontes do Google Fonts.
 
+## Contribuindo
+
+Quer mexer no painel? Veja o [CONTRIBUTING.md](CONTRIBUTING.md): como preparar o ambiente,
+o fluxo de branch + pull request e onde fica cada parte.
+
 ## Licença
 
 Código sob licença MIT. Os dados são públicos, de autoria da ANAC, e devem ser citados como tal.
