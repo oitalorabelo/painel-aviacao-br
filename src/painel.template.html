@@ -430,8 +430,14 @@ ASK_voado      = min(ASK_disponível, RPK_dem ÷ ocupação do mês‑base)</div
         air transport</i>, jun. 2026 (25,4% em 2025; 31,4% projetado para 2026) · ABEAR, estimativa citada
         pelo <i>Correio Braziliense</i> em abr. 2026 (≈ 45% após as altas do QAV) · PINDYCK, R.; RUBINFELD, D.
         <i>Microeconomia</i> (MIC5: Cournot e Bertrand).</p>
-      <p><b>Limites.</b> O painel não mede preço: as elasticidades são hipóteses da literatura (EAV2), não
-        estimativas. O HHI nacional não é o mercado relevante de um caso antitruste, que é a rota, e o
+      <p><b>Elasticidade‑renda estimada pelo grupo.</b> Regressão do crescimento anual do RPK doméstico
+        (esta base da ANAC) contra o crescimento do PIB real (IBGE, SIDRA 6784), 2001–2025 sem 2020–2023:
+        ε_renda = 1,68 (IC 95%: 1,04 a 2,32; erro‑padrão de Newey‑West). Em nível, a mesma regressão dá
+        3,3, porque a queda real de 66% do yield entre 2002 e 2018 (ANAC) entra como se fosse renda.
+        Validação retroativa: partindo de out/2014–set/2015 com o PIB observado, o simulador erra no
+        máximo 3% no RPK de 2016 a 2019.</p>
+      <p><b>Limites.</b> O painel não mede preço: a elasticidade‑preço é hipótese da literatura (EAV2), e a
+        elasticidade‑renda estimada pelo grupo não controla a tarifa ano a ano. O HHI nacional não é o mercado relevante de um caso antitruste, que é a rota, e o
         Cournot tende a superestimar margens — leia a fusão pela comparação antes × depois e pela
         eficiência de equilíbrio, não pelo nível do preço. Passageiros = RPK ÷ etapa média do mesmo mês
         no período‑base. O último mês observado pode ser preliminar.</p>
@@ -948,6 +954,7 @@ const PARAMS = [
   {id:"ey",  g:"pre", lab:"Elasticidade‑renda", min:0.5, max:3, step:0.05, def:1.5,
    fmt:v=>nf(v,2), hint:"% de RPK para cada 1% de PIB.",
    opts:[[2.0,"2,00 · mercado imaturo — Holloway (2008), estágios 1–2"],
+         [1.7,"1,70 · estimada pelo grupo — ANAC × IBGE, 2001–2025 sem 2020–23 (IC 95%: 1,0 a 2,3)"],
          [1.5,"1,50 · benchmark agregado, ponto médio (EAV2, slide 28: 1 a 2)"],
          [1.0,"1,00 · mercado maduro — Holloway (2008), estágios 3–4"]]},
   {id:"tar", g:"dem", lab:"Tendência real da tarifa", min:-4, max:4, step:0.5, def:0,
